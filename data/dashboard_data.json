@@ -1,7 +1,7 @@
 {
   "staff": [
     {
-      "branch": "Flat Iron Steak - TLF",
+      "branch": "TLF",
       "full_name": "Balin Eduardo Jr. Marcaida",
       "role": "Server",
       "preferred_name": "Eduardo",
@@ -16,7 +16,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - TLF",
+      "branch": "TLF",
       "full_name": "Espiritu, Marilyn Cabatbat",
       "role": "Server",
       "preferred_name": "Marilyn",
@@ -31,7 +31,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - TLF",
+      "branch": "TLF",
       "full_name": "Gandia Leomar",
       "role": "Server",
       "preferred_name": "Leo",
@@ -46,7 +46,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - TLF",
+      "branch": "TLF",
       "full_name": "Mat-An Kimberly Angoay",
       "role": "Supervisor",
       "preferred_name": "Kim",
@@ -61,7 +61,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - TLF",
+      "branch": "TLF",
       "full_name": "Osaikhuwuomwan Aimuamwosa Best",
       "role": "Server",
       "preferred_name": "Best",
@@ -76,7 +76,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - TLF",
+      "branch": "TLF",
       "full_name": "Rai, Karishma",
       "role": "Server",
       "preferred_name": "Karishma",
@@ -91,7 +91,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Causeway Bay",
+      "branch": "FIS - Causeway Bay",
       "full_name": "Bumagat Harron Floyd Cabusas",
       "role": "Server",
       "preferred_name": "Floyd",
@@ -106,7 +106,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Causeway Bay",
+      "branch": "FIS - Causeway Bay",
       "full_name": "Canar Janrell Villamor",
       "role": "Supervisor",
       "preferred_name": "Jhajha",
@@ -121,7 +121,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Causeway Bay",
+      "branch": "FIS - Causeway Bay",
       "full_name": "Doctura Roberto A",
       "role": "Bartender",
       "preferred_name": "Rob",
@@ -136,7 +136,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Causeway Bay",
+      "branch": "FIS - Causeway Bay",
       "full_name": "Kateline Gordo De Dios",
       "role": "Server",
       "preferred_name": "Kate",
@@ -151,7 +151,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - IFC",
+      "branch": "FIS - IFC",
       "full_name": "Brazil M D B",
       "role": "Bartender",
       "preferred_name": "Maui",
@@ -166,7 +166,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - IFC",
+      "branch": "FIS - IFC",
       "full_name": "Rai Ninamma",
       "role": "Server",
       "preferred_name": "Ninamma",
@@ -183,7 +183,7 @@
       "bonus_this_month": 10
     },
     {
-      "branch": "Flat Iron Steak - IFC",
+      "branch": "FIS - IFC",
       "full_name": "Roque, Ryanne Lou Avila",
       "role": "Server",
       "preferred_name": "Aia",
@@ -198,7 +198,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - IFC",
+      "branch": "FIS - IFC",
       "full_name": "Subedi Raju",
       "role": "Server",
       "preferred_name": "Raju",
@@ -215,7 +215,7 @@
       "bonus_this_month": 10
     },
     {
-      "branch": "Flat Iron Steak - IFC",
+      "branch": "FIS - IFC",
       "full_name": "LIMBU, Sangita",
       "role": "Server",
       "preferred_name": "Sangita",
@@ -320,7 +320,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Soho",
+      "branch": "FIS - Soho",
       "full_name": "Buendia B B Z",
       "role": "Server",
       "preferred_name": "Benedict",
@@ -335,7 +335,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Soho",
+      "branch": "FIS - Soho",
       "full_name": "Gurung, Mausam",
       "role": "Server",
       "preferred_name": "Mausam",
@@ -352,7 +352,7 @@
       "bonus_this_month": 10
     },
     {
-      "branch": "Flat Iron Steak - Soho",
+      "branch": "FIS - Soho",
       "full_name": "Justin Briva",
       "role": "Supervisor",
       "preferred_name": "Justin",
@@ -367,7 +367,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Soho",
+      "branch": "FIS - Soho",
       "full_name": "Magar Rupa Maya",
       "role": "Server",
       "preferred_name": "Rupa",
@@ -382,7 +382,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Soho",
+      "branch": "FIS - Soho",
       "full_name": "Tamang Sunaina",
       "role": "Server",
       "preferred_name": "Sunaina",
@@ -397,7 +397,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - TST",
+      "branch": "FIS - TST",
       "full_name": "Arellano, Christian John Morante",
       "role": "Server",
       "preferred_name": "John",
@@ -412,7 +412,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - TST",
+      "branch": "FIS - TST",
       "full_name": "Dewan, Sujata",
       "role": "Supervisor",
       "preferred_name": "Sujata",
@@ -427,7 +427,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - TST",
+      "branch": "FIS - TST",
       "full_name": "Haider Mutiba",
       "role": "Server",
       "preferred_name": "Ansa",
@@ -442,7 +442,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - TST",
+      "branch": "FIS - TST",
       "full_name": "Limbu Prerana",
       "role": "Supervisor",
       "preferred_name": "Prerana",
@@ -457,7 +457,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - TST",
+      "branch": "FIS - TST",
       "full_name": "Signh Rai, Sonam",
       "role": "Server",
       "preferred_name": "Sonam",
@@ -472,7 +472,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - TST",
+      "branch": "FIS - TST",
       "full_name": "Doria, Joan Megan Lariosa",
       "role": "Supervisor",
       "preferred_name": "Megan",
@@ -487,7 +487,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Sheung Wan",
+      "branch": "FIS - Sheung Wan",
       "full_name": "Anita Sharma",
       "role": "Floor",
       "preferred_name": "Anita",
@@ -502,7 +502,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Sheung Wan",
+      "branch": "FIS - Sheung Wan",
       "full_name": "Gurung Kamal",
       "role": "Floor",
       "preferred_name": "Kumal",
@@ -517,7 +517,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Sheung Wan",
+      "branch": "FIS - Sheung Wan",
       "full_name": "Manarang Glenn G",
       "role": "Floor",
       "preferred_name": "Glenn",
@@ -532,7 +532,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Sheung Wan",
+      "branch": "FIS - Sheung Wan",
       "full_name": "Padua Christian Jay Simbulan",
       "role": "Floor",
       "preferred_name": "Cj",
@@ -547,7 +547,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Sheung Wan",
+      "branch": "FIS - Sheung Wan",
       "full_name": "Tsuchiya Nozomi Ramos",
       "role": "Floor",
       "preferred_name": "Ramos",
@@ -562,7 +562,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Wan Chai",
+      "branch": "FIS - Wan Chai",
       "full_name": "Gurung Sandra",
       "role": "Supervisor",
       "preferred_name": "Sandra",
@@ -577,7 +577,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Wan Chai",
+      "branch": "FIS - Wan Chai",
       "full_name": "Kitiyayam Wimonwan",
       "role": "Server",
       "preferred_name": "Tanny",
@@ -592,7 +592,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Wan Chai",
+      "branch": "FIS - Wan Chai",
       "full_name": "Safran Lance Angelo B.",
       "role": "Server",
       "preferred_name": "Lance",
@@ -607,7 +607,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak - Wan Chai",
+      "branch": "FIS - Wan Chai",
       "full_name": "Vega Leny Carreon",
       "role": "Supervisor",
       "preferred_name": "Leny",
@@ -622,7 +622,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Burger -TST HC",
+      "branch": "FIB -TST HC",
       "full_name": "Ahmed Hassan",
       "role": "Sr. Server",
       "preferred_name": "Hassan",
@@ -637,7 +637,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Burger -TST HC",
+      "branch": "FIB -TST HC",
       "full_name": "Bautista Raquel Laja",
       "role": "Sr. Supervisor",
       "preferred_name": "Raquel",
@@ -652,7 +652,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Burger -TST HC",
+      "branch": "FIB -TST HC",
       "full_name": "Gurung Sakshi",
       "role": "Server",
       "preferred_name": "Sakshi",
@@ -701,7 +701,7 @@
       "bonus_this_month": 80
     },
     {
-      "branch": "Flat Iron Steak -QB",
+      "branch": "FIS -QB",
       "full_name": "Tshemgi sherpa",
       "role": "Supervisor",
       "preferred_name": "Tshemgi",
@@ -716,7 +716,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak -QB",
+      "branch": "FIS -QB",
       "full_name": "Sheelu Limbu",
       "role": "Server",
       "preferred_name": "Sheelu",
@@ -731,7 +731,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak -QB",
+      "branch": "FIS -QB",
       "full_name": "Richel Cimafranca",
       "role": "Server",
       "preferred_name": "Richel",
@@ -746,7 +746,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak -QB",
+      "branch": "FIS -QB",
       "full_name": "Aditi Rai",
       "role": "Server",
       "preferred_name": "Aditi",
@@ -763,7 +763,7 @@
       "bonus_this_month": 10
     },
     {
-      "branch": "Flat Iron Steak -QB",
+      "branch": "FIS -QB",
       "full_name": "Mubashir",
       "role": "Server",
       "preferred_name": "Mubashir",
@@ -778,7 +778,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak -QB",
+      "branch": "FIS -QB",
       "full_name": "Yang Danielle Louise SY",
       "role": "Bar",
       "preferred_name": "Danielle",
@@ -793,7 +793,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak -QB",
+      "branch": "FIS -QB",
       "full_name": "Nunez Jam Chary Ching",
       "role": "coffee shop",
       "preferred_name": "Nunez",
@@ -808,7 +808,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak -QB",
+      "branch": "FIS -QB",
       "full_name": "Hernandez Patrici",
       "role": "server",
       "preferred_name": "Pat",
@@ -823,7 +823,7 @@
       "bonus_this_month": 0
     },
     {
-      "branch": "Flat Iron Steak -QB",
+      "branch": "FIS -QB",
       "full_name": "Palencai,rheamae abiertas",
       "role": "coffee shop",
       "preferred_name": "Palencia",
@@ -1019,19 +1019,19 @@
     }
   ],
   "branch_summary_current": {
-    "Flat Iron Steak - TLF": {
+    "TLF": {
       "total_staff": 6,
       "referrals": 0,
       "bonus": 0,
       "active_referrers": 0
     },
-    "Flat Iron Steak - Causeway Bay": {
+    "FIS - Causeway Bay": {
       "total_staff": 4,
       "referrals": 0,
       "bonus": 0,
       "active_referrers": 0
     },
-    "Flat Iron Steak - IFC": {
+    "FIS - IFC": {
       "total_staff": 5,
       "referrals": 2,
       "bonus": 20,
@@ -1043,31 +1043,31 @@
       "bonus": 0,
       "active_referrers": 0
     },
-    "Flat Iron Steak - Soho": {
+    "FIS - Soho": {
       "total_staff": 5,
       "referrals": 1,
       "bonus": 10,
       "active_referrers": 1
     },
-    "Flat Iron Steak - TST": {
+    "FIS - TST": {
       "total_staff": 6,
       "referrals": 0,
       "bonus": 0,
       "active_referrers": 0
     },
-    "Flat Iron Steak - Sheung Wan": {
+    "FIS - Sheung Wan": {
       "total_staff": 5,
       "referrals": 0,
       "bonus": 0,
       "active_referrers": 0
     },
-    "Flat Iron Steak - Wan Chai": {
+    "FIS - Wan Chai": {
       "total_staff": 4,
       "referrals": 0,
       "bonus": 0,
       "active_referrers": 0
     },
-    "Flat Iron Burger -TST HC": {
+    "FIB -TST HC": {
       "total_staff": 3,
       "referrals": 0,
       "bonus": 0,
@@ -1079,7 +1079,7 @@
       "bonus": 90,
       "active_referrers": 2
     },
-    "Flat Iron Steak -QB": {
+    "FIS -QB": {
       "total_staff": 9,
       "referrals": 1,
       "bonus": 10,
@@ -1111,19 +1111,19 @@
   },
   "current_month": "2026-08",
   "store_targets": {
-    "Flat Iron Steak - Wan Chai": 465,
-    "Flat Iron Steak - Soho": 465,
+    "FIS - Wan Chai": 465,
+    "FIS - Soho": 465,
     "Picanhas": 310,
-    "Flat Iron Burger -TST HC": 248,
-    "Flat Iron Steak - Sheung Wan": 620,
-    "Flat Iron Steak - TLF": 620,
-    "Flat Iron Steak - IFC": 620,
+    "FIB -TST HC": 248,
+    "FIS - Sheung Wan": 620,
+    "TLF": 620,
+    "FIS - IFC": 620,
     "Punjab Warriors": 620,
-    "Flat Iron Steak - Causeway Bay": 620,
+    "FIS - Causeway Bay": 620,
     "FIB - Wanchai": 248,
-    "Flat Iron Steak - TST": 465,
+    "FIS - TST": 465,
     "TLF & FIS- Macau": 465,
-    "Flat Iron Steak -QB": 465
+    "FIS -QB": 465
   },
   "bonus_per_referral": 10
 }
