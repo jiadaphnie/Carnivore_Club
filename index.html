@@ -89,10 +89,32 @@
     font-size: 13px;
     cursor: pointer;
   }
-  .meta-line {
+  details.meta-details {
+    margin-bottom: 28px;
+  }
+  details.meta-details summary {
     color: var(--muted);
     font-size: 12.5px;
-    margin-bottom: 28px;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  details.meta-details summary::-webkit-details-marker { display: none; }
+  details.meta-details summary::before {
+    content: "▸";
+    display: inline-block;
+    color: var(--muted);
+    transition: transform 0.15s ease;
+    flex-shrink: 0;
+  }
+  details.meta-details[open] summary::before { transform: rotate(90deg); }
+  details.meta-details .meta-full {
+    color: var(--muted);
+    font-size: 12.5px;
+    line-height: 1.5;
+    margin: 6px 0 0 16px;
   }
 
   .kpi-grid {
@@ -237,6 +259,7 @@
   .lb-count, .branch-stats .lb-count { font-size: 19px; font-weight: 700; line-height: 1.1; }
   .lb-count-label { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
   .lb-value { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .lb-target { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
   .tag {
     font-size: 10.5px;
@@ -356,12 +379,25 @@
   }
 
   @media (max-width: 640px) {
-    .kpi-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .kpi-value { font-size: 20px; }
+    .wrap { padding: 16px 12px 60px; }
+    header.page-head { gap: 10px; }
+    .title-block h1 { font-size: 21px; }
+    .title-block p { font-size: 13px; }
+    .kpi-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .kpi-tile { padding: 10px 8px; border-radius: 10px; }
+    .kpi-value { font-size: 17px; }
+    .kpi-label { font-size: 10.5px; }
     .branch-name-line { flex-direction: column; align-items: flex-start; gap: 2px; }
     .branch-name-line .branch-sub { margin-left: 0; }
-    .mvp-card { flex-wrap: wrap; }
+    .mvp-card { flex-wrap: wrap; padding: 14px 16px; }
     .mvp-stats { width: 100%; justify-content: space-between; gap: 12px; }
+    .branch-card, .lb-row { padding: 10px 10px; gap: 10px; }
+    .branch-stats, .lb-stats { min-width: 62px; }
+    .lb-count, .branch-stats .lb-count { font-size: 16px; }
+    table.roster-table, table.analytics-table { font-size: 12px; }
+    table.roster-table th, table.analytics-table th,
+    table.roster-table td, table.analytics-table td { padding: 6px 8px; }
+    .trend-row { overflow-x: auto; padding-bottom: 4px; }
   }
 </style>
 </head>
@@ -375,7 +411,10 @@
     </div>
     <button class="theme-toggle" onclick="toggleTheme()">🌓 Toggle theme</button>
   </header>
-  <div class="meta-line">Showing August 2026 · resets each month · Source: Eber XM → Insights → Referral → Referral Transactions, matched to staff by account email. Managers (incl. AM / RM / BM) are not included.</div>
+  <details class="meta-details">
+    <summary>Showing August 2026 · resets each month</summary>
+    <div class="meta-full">Source: Eber XM → Insights → Referral → Referral Transactions, matched to staff by account email. Managers (incl. AM / RM / BM) are not included.</div>
+  </details>
 
   <div class="kpi-grid">
     <div class="kpi-tile">
@@ -407,7 +446,7 @@
       </div>
 
   <section>
-    <h2>Branch leaderboard — August 2026</h2>
+    <h2>Branch leaderboard · August 2026</h2>
     <div class="section-hint">Ranked by referrals this month. Every branch starts back at zero next month.</div>
     <ul class="branch-list">
       
@@ -419,12 +458,13 @@
             <span class="branch-sub">2 of 2 staff on the board</span>
           </div>
           <div class="track"><div class="fill" style="width:100%"></div></div>
-          
+
         </div>
         <div class="branch-stats">
           <div class="lb-count">9</div>
           <div class="lb-count-label">referrals</div>
           <div class="lb-value">HKD 90 bonus</div>
+          <div class="lb-target">3.6% of target</div>
         </div>
       </li>
       <li class="branch-card">
@@ -435,12 +475,13 @@
             <span class="branch-sub">2 of 5 staff on the board</span>
           </div>
           <div class="track"><div class="fill" style="width:22%"></div></div>
-          
+
         </div>
         <div class="branch-stats">
           <div class="lb-count">2</div>
           <div class="lb-count-label">referrals</div>
           <div class="lb-value">HKD 20 bonus</div>
+          <div class="lb-target">0.3% of target</div>
         </div>
       </li>
       <li class="branch-card">
@@ -451,12 +492,13 @@
             <span class="branch-sub">1 of 9 staff on the board</span>
           </div>
           <div class="track"><div class="fill" style="width:11%"></div></div>
-          
+
         </div>
         <div class="branch-stats">
           <div class="lb-count">1</div>
           <div class="lb-count-label">referral</div>
           <div class="lb-value">HKD 10 bonus</div>
+          <div class="lb-target">0.2% of target</div>
         </div>
       </li>
       <li class="branch-card">
@@ -467,12 +509,13 @@
             <span class="branch-sub">1 of 5 staff on the board</span>
           </div>
           <div class="track"><div class="fill" style="width:11%"></div></div>
-          
+
         </div>
         <div class="branch-stats">
           <div class="lb-count">1</div>
           <div class="lb-count-label">referral</div>
           <div class="lb-value">HKD 10 bonus</div>
+          <div class="lb-target">0.2% of target</div>
         </div>
       </li>
       <li class="branch-card">
@@ -483,12 +526,13 @@
             <span class="branch-sub">0 of 9 staff on the board</span>
           </div>
           <div class="track"><div class="fill" style="width:0%"></div></div>
-          <div class="empty-note">No referrals logged yet this month — first one on the board wins bragging rights 👀</div>
+          <div class="empty-note">No referrals logged yet this month. First one on the board wins bragging rights 👀</div>
         </div>
         <div class="branch-stats">
           <div class="lb-count">0</div>
           <div class="lb-count-label">referrals</div>
-          <div class="lb-value">—</div>
+          <div class="lb-value">n/a</div>
+          <div class="lb-target">0.0% of target</div>
         </div>
       </li>
       <li class="branch-card">
@@ -499,12 +543,13 @@
             <span class="branch-sub">0 of 6 staff on the board</span>
           </div>
           <div class="track"><div class="fill" style="width:0%"></div></div>
-          <div class="empty-note">No referrals logged yet this month — first one on the board wins bragging rights 👀</div>
+          <div class="empty-note">No referrals logged yet this month. First one on the board wins bragging rights 👀</div>
         </div>
         <div class="branch-stats">
           <div class="lb-count">0</div>
           <div class="lb-count-label">referrals</div>
-          <div class="lb-value">—</div>
+          <div class="lb-value">n/a</div>
+          <div class="lb-target">0.0% of target</div>
         </div>
       </li>
       <li class="branch-card">
@@ -515,12 +560,13 @@
             <span class="branch-sub">0 of 6 staff on the board</span>
           </div>
           <div class="track"><div class="fill" style="width:0%"></div></div>
-          <div class="empty-note">No referrals logged yet this month — first one on the board wins bragging rights 👀</div>
+          <div class="empty-note">No referrals logged yet this month. First one on the board wins bragging rights 👀</div>
         </div>
         <div class="branch-stats">
           <div class="lb-count">0</div>
           <div class="lb-count-label">referrals</div>
-          <div class="lb-value">—</div>
+          <div class="lb-value">n/a</div>
+          <div class="lb-target">0.0% of target</div>
         </div>
       </li>
       <li class="branch-card">
@@ -531,12 +577,13 @@
             <span class="branch-sub">0 of 6 staff on the board</span>
           </div>
           <div class="track"><div class="fill" style="width:0%"></div></div>
-          <div class="empty-note">No referrals logged yet this month — first one on the board wins bragging rights 👀</div>
+          <div class="empty-note">No referrals logged yet this month. First one on the board wins bragging rights 👀</div>
         </div>
         <div class="branch-stats">
           <div class="lb-count">0</div>
           <div class="lb-count-label">referrals</div>
-          <div class="lb-value">—</div>
+          <div class="lb-value">n/a</div>
+          <div class="lb-target">0.0% of target</div>
         </div>
       </li>
       <li class="branch-card">
@@ -547,12 +594,13 @@
             <span class="branch-sub">0 of 5 staff on the board</span>
           </div>
           <div class="track"><div class="fill" style="width:0%"></div></div>
-          <div class="empty-note">No referrals logged yet this month — first one on the board wins bragging rights 👀</div>
+          <div class="empty-note">No referrals logged yet this month. First one on the board wins bragging rights 👀</div>
         </div>
         <div class="branch-stats">
           <div class="lb-count">0</div>
           <div class="lb-count-label">referrals</div>
-          <div class="lb-value">—</div>
+          <div class="lb-value">n/a</div>
+          <div class="lb-target">0.0% of target</div>
         </div>
       </li>
       <li class="branch-card">
@@ -563,12 +611,13 @@
             <span class="branch-sub">0 of 4 staff on the board</span>
           </div>
           <div class="track"><div class="fill" style="width:0%"></div></div>
-          <div class="empty-note">No referrals logged yet this month — first one on the board wins bragging rights 👀</div>
+          <div class="empty-note">No referrals logged yet this month. First one on the board wins bragging rights 👀</div>
         </div>
         <div class="branch-stats">
           <div class="lb-count">0</div>
           <div class="lb-count-label">referrals</div>
-          <div class="lb-value">—</div>
+          <div class="lb-value">n/a</div>
+          <div class="lb-target">0.0% of target</div>
         </div>
       </li>
       <li class="branch-card">
@@ -579,12 +628,13 @@
             <span class="branch-sub">0 of 4 staff on the board</span>
           </div>
           <div class="track"><div class="fill" style="width:0%"></div></div>
-          <div class="empty-note">No referrals logged yet this month — first one on the board wins bragging rights 👀</div>
+          <div class="empty-note">No referrals logged yet this month. First one on the board wins bragging rights 👀</div>
         </div>
         <div class="branch-stats">
           <div class="lb-count">0</div>
           <div class="lb-count-label">referrals</div>
-          <div class="lb-value">—</div>
+          <div class="lb-value">n/a</div>
+          <div class="lb-target">0.0% of target</div>
         </div>
       </li>
       <li class="branch-card">
@@ -595,12 +645,13 @@
             <span class="branch-sub">0 of 3 staff on the board</span>
           </div>
           <div class="track"><div class="fill" style="width:0%"></div></div>
-          <div class="empty-note">No referrals logged yet this month — first one on the board wins bragging rights 👀</div>
+          <div class="empty-note">No referrals logged yet this month. First one on the board wins bragging rights 👀</div>
         </div>
         <div class="branch-stats">
           <div class="lb-count">0</div>
           <div class="lb-count-label">referrals</div>
-          <div class="lb-value">—</div>
+          <div class="lb-value">n/a</div>
+          <div class="lb-target">0.0% of target</div>
         </div>
       </li>
       <li class="branch-card">
@@ -611,19 +662,20 @@
             <span class="branch-sub">0 of 3 staff on the board</span>
           </div>
           <div class="track"><div class="fill" style="width:0%"></div></div>
-          <div class="empty-note">No referrals logged yet this month — first one on the board wins bragging rights 👀</div>
+          <div class="empty-note">No referrals logged yet this month. First one on the board wins bragging rights 👀</div>
         </div>
         <div class="branch-stats">
           <div class="lb-count">0</div>
           <div class="lb-count-label">referrals</div>
-          <div class="lb-value">—</div>
+          <div class="lb-value">n/a</div>
+          <div class="lb-target">0.0% of target</div>
         </div>
       </li>
     </ul>
   </section>
 
   <section>
-    <h2>Top referrers — August 2026</h2>
+    <h2>Top referrers · August 2026</h2>
     <div class="section-hint">Everyone with at least one referral this month. Ranked by referrals, then by bonus earned.</div>
     <ul class="lb-list">
       
@@ -853,7 +905,7 @@
 
   <section>
     <h2>Monthly trend</h2>
-    <div class="section-hint">Only one month on record so far — this chart will fill in as more months of referral data come through Eber.</div>
+    <div class="section-hint">Only one month on record so far. This chart will fill in as more months of referral data come through Eber.</div>
     <div class="trend-card">
       <div class="trend-row">
         
@@ -869,8 +921,8 @@
   </section>
 
   <section>
-    <h2>Full roster by branch — August 2026</h2>
-    <div class="section-hint">Click a branch to see every teammate's count this month — including the ones still waiting for their first referral.</div>
+    <h2>Full roster by branch · August 2026</h2>
+    <div class="section-hint">Click a branch to see every teammate's count this month, including the ones still waiting for their first referral.</div>
     
       <details class="branch-detail" open>
         <summary>
@@ -913,17 +965,17 @@
           <tr class="zero">
             <td class="col-name">Aia <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Maui <span class="row-role">Bartender</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Sangita <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr></tbody>
         </table>
       </details>
@@ -943,42 +995,42 @@
           <tr class="zero">
             <td class="col-name">Danielle <span class="row-role">Bar</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Mubashir <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Nunez <span class="row-role">coffee shop</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Palencia <span class="row-role">coffee shop</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Pat <span class="row-role">server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Richel <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Sheelu <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Tshemgi <span class="row-role">Supervisor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr></tbody>
         </table>
       </details>
@@ -998,22 +1050,22 @@
           <tr class="zero">
             <td class="col-name">Benedict <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Justin <span class="row-role">Supervisor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Rupa <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Sunaina <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr></tbody>
         </table>
       </details>
@@ -1028,47 +1080,47 @@
           <tr class="zero">
             <td class="col-name">Bern <span class="row-role">Floor Supervisor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Casandra <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Jai <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Luis <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Marco <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Myles <span class="row-role">Host</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Nora <span class="row-role">Supervisor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Romel <span class="row-role">Bar Supervisor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Vee <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr></tbody>
         </table>
       </details>
@@ -1083,32 +1135,32 @@
           <tr class="zero">
             <td class="col-name">Best <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Eduardo <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Karishma <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Kim <span class="row-role">Supervisor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Leo <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Marilyn <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr></tbody>
         </table>
       </details>
@@ -1123,32 +1175,32 @@
           <tr class="zero">
             <td class="col-name">Ansa <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">John <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Megan <span class="row-role">Supervisor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Prerana <span class="row-role">Supervisor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Sonam <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Sujata <span class="row-role">Supervisor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr></tbody>
         </table>
       </details>
@@ -1163,32 +1215,32 @@
           <tr class="zero">
             <td class="col-name">Akash <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Alvin <span class="row-role">Bartender</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Chadani <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Nabi <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Nee <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Nisha <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr></tbody>
         </table>
       </details>
@@ -1203,27 +1255,27 @@
           <tr class="zero">
             <td class="col-name">Anita <span class="row-role">Floor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Cj <span class="row-role">Floor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Glenn <span class="row-role">Floor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Kumal <span class="row-role">Floor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Ramos <span class="row-role">Floor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr></tbody>
         </table>
       </details>
@@ -1238,22 +1290,22 @@
           <tr class="zero">
             <td class="col-name">Floyd <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Jhajha <span class="row-role">Supervisor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Kate <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Rob <span class="row-role">Bartender</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr></tbody>
         </table>
       </details>
@@ -1268,22 +1320,22 @@
           <tr class="zero">
             <td class="col-name">Lance <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Leny <span class="row-role">Supervisor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Sandra <span class="row-role">Supervisor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Tanny <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr></tbody>
         </table>
       </details>
@@ -1298,17 +1350,17 @@
           <tr class="zero">
             <td class="col-name">Hassan <span class="row-role">Sr. Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Raquel <span class="row-role">Sr. Supervisor</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Sakshi <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr></tbody>
         </table>
       </details>
@@ -1323,17 +1375,17 @@
           <tr class="zero">
             <td class="col-name">Anjaii <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Nishan <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr>
           <tr class="zero">
             <td class="col-name">Sabita <span class="row-role">Server</span> </td>
             <td class="col-num">0</td>
-            <td class="col-num">—</td>
+            <td class="col-num">n/a</td>
           </tr></tbody>
         </table>
       </details>
