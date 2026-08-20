@@ -94,16 +94,13 @@ const branchListHtml = branchRanked.map((b, i) => {
 const topHtml = ranked.map((s, i) => {
   const rankBadge = i < 3 ? `<div class="rank-badge ${medals[i]}">${medalIcons[i]}</div>` : `<div class="rank-badge">${i + 1}</div>`;
   const width = Math.round(s.referrals_this_month / ranked[0].referrals_this_month * 100);
-  const voucherTag = s.vouchers > 0
-    ? `\n            <span class="tag tag-voucher">🎁 ${s.vouchers} voucher${s.vouchers > 1 ? 's' : ''}</span>`
-    : '';
   const label = s.referrals_this_month === 1 ? 'referral' : 'referrals';
   return `      <li class="lb-row">
         ${rankBadge}
         <div class="avatar">${esc(s.display_name[0])}</div>
         <div class="lb-main">
           <div class="lb-name-line">
-            <span class="lb-name">${esc(s.display_name)}</span>${voucherTag}
+            <span class="lb-name">${esc(s.display_name)}</span>
           </div>
           <div class="lb-meta">${esc(s.branch)} · ${esc(s.role)}</div>
           <div class="track"><div class="fill" style="width:${width}%"></div></div>
@@ -160,42 +157,15 @@ const trendHint = monthKeys.length <= 1
   : `Referrals per month across ${monthKeys.length} months on record.`;
 
 // ---------- Full roster ----------
-const rosterHtml = branchOrder.map((name, idx) => {
-  const branchStaff = d.staff.filter(s => s.branch === name)
-    .sort((a, b) => b.referrals_this_month - a.referrals_this_month);
-  const b = d.branch_summary_current[name];
-  const rows = branchStaff.map(s => {
-    const voucherTag = s.vouchers > 0 ? ` <span class="tag tag-voucher">🎁×${s.vouchers}</span>` : '';
-    return `          <tr class="${s.referrals_this_month === 0 ? 'zero' : ''}">
-            <td class="col-name">${esc(s.display_name)} <span class="row-role">${esc(s.role)}</span>${voucherTag}</td>
-            <td class="col-num">${s.referrals_this_month}</td>
-            <td class="col-num">${s.referrals_this_month > 0 ? 'HKD ' + s.bonus_this_month : 'n/a'}</td>
-          </tr>`;
-  }).join('\n');
-  const label = b.referrals === 1 ? 'referral' : 'referrals';
-  return `      <details class="branch-detail"${idx === 0 ? ' open' : ''}>
-        <summary>
-          <span class="summary-name">${esc(name)}</span>
-          <span class="summary-stats">${b.referrals} ${label} · ${b.total_staff} staff</span>
-        </summary>
-        <table class="roster-table">
-          <thead><tr><th>Name</th><th>Referrals</th><th>Referral bonus</th></tr></thead>
-          <tbody>
-${rows}</tbody>
-        </table>
-      </details>`;
-}).join('\n');
-
-// Sort roster sections by referral count desc (most active branch first), matching leaderboard order
+// Roster sections are ordered by referral count desc (most active branch first), matching leaderboard order
 const rosterOrder = branchRanked.map(b => b.name);
 const rosterHtmlOrdered = rosterOrder.map((name, idx) => {
   const branchStaff = d.staff.filter(s => s.branch === name)
     .sort((a, b) => b.referrals_this_month - a.referrals_this_month);
   const b = d.branch_summary_current[name];
   const rows = branchStaff.map(s => {
-    const voucherTag = s.vouchers > 0 ? ` <span class="tag tag-voucher">🎁×${s.vouchers}</span>` : '';
     return `          <tr class="${s.referrals_this_month === 0 ? 'zero' : ''}">
-            <td class="col-name">${esc(s.display_name)} <span class="row-role">${esc(s.role)}</span>${voucherTag}</td>
+            <td class="col-name">${esc(s.display_name)} <span class="row-role">${esc(s.role)}</span></td>
             <td class="col-num">${s.referrals_this_month}</td>
             <td class="col-num">${s.referrals_this_month > 0 ? 'HKD ' + s.bonus_this_month : 'n/a'}</td>
           </tr>`;
