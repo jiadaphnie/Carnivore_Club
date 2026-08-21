@@ -5,28 +5,44 @@ const path = require('path');
 const dataPath = path.join(__dirname, '..', 'data', 'dashboard_data.json');
 const d = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
-// Roster correction: Justin Briva's email was stored as brivajustinwork@gmail.com,
-// but the FOH Staff Directory (Google Sheet, cell G38) has brivajustin@gmail.com.
-// The wrong email caused his 22 referrals this month to be misattributed to a
-// non-staff "customer" account and excluded from the dashboard.
+// Roster corrections against the FOH Staff Directory (Google Sheet):
+// - Justin Briva's email was stored as brivajustinwork@gmail.com, but the sheet
+//   (cell G38) has brivajustin@gmail.com. The wrong email misattributed his
+//   referrals to a non-staff "customer" account.
+// - Tanny (Kitiyayam Wimonwan) and Leny (Vega Leny Carreon), both FIS - Wan Chai,
+//   had blank emails in the roster; the sheet has real addresses for both.
 for (const s of d.staff) {
   if (s.email === 'brivajustinwork@gmail.com') {
     s.email = 'brivajustin@gmail.com';
   }
+  if (s.full_name === 'Kitiyayam Wimonwan' && !s.email) {
+    s.email = 'wimonwankitiyayam@gmail.com';
+  }
+  if (s.full_name === 'Vega Leny Carreon' && !s.email) {
+    s.email = 'lenykc@gmail.com';
+  }
 }
 
 // email -> { referrals, vouchers }, staff-matched rows only (non-staff / team account excluded)
+// Covers Aug 1-21, 2026.
 const updates = {
-  'roqueaia415@gmail.com': { referrals: 11, vouchers: 5 },
-  'brivajustin@gmail.com': { referrals: 22, vouchers: 4 },
-  'bhabeangeles@gmail.com': { referrals: 8, vouchers: 0 },
-  'shiela.may.calbario@gmail.com': { referrals: 8, vouchers: 1 },
-  'samual.salvator61@gmail.com': { referrals: 3, vouchers: 1 },
-  'grgkamal777@gmail.com': { referrals: 2, vouchers: 1 },
-  'kimberlymatan80@gmail.com': { referrals: 1, vouchers: 0 },
+  'roqueaia415@gmail.com': { referrals: 16, vouchers: 8 },
+  'brivajustin@gmail.com': { referrals: 41, vouchers: 11 },
+  'bhabeangeles@gmail.com': { referrals: 13, vouchers: 0 },
+  'shiela.may.calbario@gmail.com': { referrals: 12, vouchers: 1 },
+  'samual.salvator61@gmail.com': { referrals: 9, vouchers: 2 },
+  'grgkamal777@gmail.com': { referrals: 4, vouchers: 3 },
+  'kimberlymatan80@gmail.com': { referrals: 3, vouchers: 0 },
   'nymphrai01@gmail.com': { referrals: 1, vouchers: 0 },
-  'rajusubedimala@gmail.com': { referrals: 1, vouchers: 0 },
+  'rajusubedimala@gmail.com': { referrals: 2, vouchers: 0 },
   'raii.aditi01@gmail.com': { referrals: 1, vouchers: 0 },
+  'bernadete.francia@gmail.com': { referrals: 4, vouchers: 1 },
+  'nurainibassam34@gmail.com': { referrals: 7, vouchers: 0 },
+  'wimonwankitiyayam@gmail.com': { referrals: 5, vouchers: 1 },
+  'christianjpadua@gmail.com': { referrals: 1, vouchers: 1 },
+  'kellisip08@gmail.com': { referrals: 2, vouchers: 1 },
+  'omonuwabest00@gmail.com': { referrals: 1, vouchers: 0 },
+  'lenykc@gmail.com': { referrals: 1, vouchers: 1 },
 };
 
 const monthKey = '2026-08';
