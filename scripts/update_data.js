@@ -5,9 +5,20 @@ const path = require('path');
 const dataPath = path.join(__dirname, '..', 'data', 'dashboard_data.json');
 const d = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
+// Roster correction: Justin Briva's email was stored as brivajustinwork@gmail.com,
+// but the FOH Staff Directory (Google Sheet, cell G38) has brivajustin@gmail.com.
+// The wrong email caused his 22 referrals this month to be misattributed to a
+// non-staff "customer" account and excluded from the dashboard.
+for (const s of d.staff) {
+  if (s.email === 'brivajustinwork@gmail.com') {
+    s.email = 'brivajustin@gmail.com';
+  }
+}
+
 // email -> { referrals, vouchers }, staff-matched rows only (non-staff / team account excluded)
 const updates = {
   'roqueaia415@gmail.com': { referrals: 11, vouchers: 5 },
+  'brivajustin@gmail.com': { referrals: 22, vouchers: 4 },
   'bhabeangeles@gmail.com': { referrals: 8, vouchers: 0 },
   'shiela.may.calbario@gmail.com': { referrals: 8, vouchers: 1 },
   'samual.salvator61@gmail.com': { referrals: 3, vouchers: 1 },

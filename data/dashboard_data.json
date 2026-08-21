@@ -360,15 +360,17 @@
       "full_name": "Justin Briva",
       "role": "Supervisor",
       "preferred_name": "Justin",
-      "email": "brivajustinwork@gmail.com",
+      "email": "brivajustin@gmail.com",
       "is_manager": false,
       "display_name": "Justin",
-      "referrals": 0,
-      "bonus": 0,
-      "vouchers": 0,
-      "by_month": {},
-      "referrals_this_month": 0,
-      "bonus_this_month": 0
+      "referrals": 22,
+      "bonus": 220,
+      "vouchers": 4,
+      "by_month": {
+        "2026-08": 22
+      },
+      "referrals_this_month": 22,
+      "bonus_this_month": 220
     },
     {
       "branch": "FIS - Soho",
@@ -1051,9 +1053,9 @@
     },
     "FIS - Soho": {
       "total_staff": 5,
-      "referrals": 3,
-      "bonus": 30,
-      "active_referrers": 1
+      "referrals": 25,
+      "bonus": 250,
+      "active_referrers": 2
     },
     "FIS - TST": {
       "total_staff": 6,
@@ -1106,9 +1108,9 @@
   },
   "monthly": {
     "2026-08": {
-      "referrals": 36,
-      "bonus": 360,
-      "active_referrers": 9
+      "referrals": 58,
+      "bonus": 580,
+      "active_referrers": 10
     }
   },
   "month_names": {
