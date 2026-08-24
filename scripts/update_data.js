@@ -13,6 +13,9 @@ const d = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 //   had blank emails in the roster; the sheet has real addresses for both.
 // - Marilyn (Espiritu, Marilyn Cabatbat), TLF, updated her email; the sheet
 //   (row 6) now shows Jesycabatbat@gmail.com, replacing jesucabatbat@gmail.com.
+// - Myles (Estiva Leong Jerilee Myles), TLF & FIS- Macau, confirmed by the user
+//   to now be using mimosa.summerholics@gmail.com (was jmyles.leong@gmail.com,
+//   which the sheet had not yet been updated to reflect).
 for (const s of d.staff) {
   if (s.email === 'brivajustinwork@gmail.com') {
     s.email = 'brivajustin@gmail.com';
@@ -26,18 +29,15 @@ for (const s of d.staff) {
   if (s.email === 'jesucabatbat@gmail.com') {
     s.email = 'jesycabatbat@gmail.com';
   }
+  if (s.email === 'jmyles.leong@gmail.com') {
+    s.email = 'mimosa.summerholics@gmail.com';
+  }
 }
 
 // email -> { referrals, vouchers }, staff-matched rows only (non-staff / team
 // account excluded). Covers Aug 1-24, 2026, plus 6 manually-verified referrals
 // from the sheet's "Untracked" tab (Anita +1, Raju +3, Aia +1, Ramos +1) that
 // the automated Eber report never recorded.
-//
-// Note: 8 referrals this period (codes MYLESMO/X1JO60, referrer name "Jerilee
-// Myles Estiva Leong" matching staff member Myles) came in under
-// mimosa.summerholics@gmail.com, not Myles's known email (jmyles.leong@gmail.com,
-// still what the sheet has). Left unattributed pending confirmation this is
-// really his account before crediting them.
 const updates = {
   'roqueaia415@gmail.com': { referrals: 39, vouchers: 25 },
   'brivajustin@gmail.com': { referrals: 66, vouchers: 23 },
@@ -67,6 +67,7 @@ const updates = {
   'dewansujasna22@gmail.com': { referrals: 2, vouchers: 1 },
   'melndm@yahoo.com': { referrals: 1, vouchers: 0 },
   'nozomitsuchiya092218@gmail.com': { referrals: 1, vouchers: 0 },
+  'mimosa.summerholics@gmail.com': { referrals: 8, vouchers: 2 },
 };
 
 const monthKey = '2026-08';

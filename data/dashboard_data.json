@@ -908,15 +908,17 @@
       "full_name": "Estiva Leong Jerilee Myles",
       "role": "Host",
       "preferred_name": "Myles",
-      "email": "jmyles.leong@gmail.com",
+      "email": "mimosa.summerholics@gmail.com",
       "is_manager": false,
       "display_name": "Myles",
-      "referrals": 0,
-      "bonus": 0,
-      "vouchers": 0,
-      "by_month": {},
-      "referrals_this_month": 0,
-      "bonus_this_month": 0
+      "referrals": 8,
+      "bonus": 80,
+      "vouchers": 2,
+      "by_month": {
+        "2026-08": 8
+      },
+      "referrals_this_month": 8,
+      "bonus_this_month": 80
     },
     {
       "branch": "TLF & FIS- Macau",
@@ -1131,9 +1133,9 @@
     },
     "TLF & FIS- Macau": {
       "total_staff": 9,
-      "referrals": 27,
-      "bonus": 270,
-      "active_referrers": 5
+      "referrals": 35,
+      "bonus": 350,
+      "active_referrers": 6
     },
     "Picanhas": {
       "total_staff": 3,
@@ -1144,9 +1146,9 @@
   },
   "monthly": {
     "2026-08": {
-      "referrals": 269,
-      "bonus": 2690,
-      "active_referrers": 28
+      "referrals": 277,
+      "bonus": 2770,
+      "active_referrers": 29
     }
   },
   "month_names": {
