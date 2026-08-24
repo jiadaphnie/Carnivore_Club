@@ -38,26 +38,33 @@ for (const s of d.staff) {
 // account excluded). Covers Aug 1-24, 2026, plus 6 manually-verified referrals
 // from the sheet's "Untracked" tab (Anita +1, Raju +3, Aia +1, Ramos +1) that
 // the automated Eber report never recorded.
+//
+// A systemic gap was found and closed: any transaction dated Aug 21 after
+// ~16:19 (when the first Aug 1-21 pull was taken) had been missed by both
+// that pull and the later Aug 22-24 delta pull, which started at Aug 22
+// 00:00. Confirmed by re-pulling each affected person's full history
+// directly (Nee, Nabi, Justin) and by re-scanning the whole Aug 21 16:19-
+// 23:59 window (Mausam, Kim, Nora, Tanny, Raquel, Best, Myles).
 const updates = {
   'roqueaia415@gmail.com': { referrals: 39, vouchers: 25 },
-  'brivajustin@gmail.com': { referrals: 66, vouchers: 23 },
+  'brivajustin@gmail.com': { referrals: 77, vouchers: 28 },
   'bhabeangeles@gmail.com': { referrals: 13, vouchers: 0 },
   'shiela.may.calbario@gmail.com': { referrals: 14, vouchers: 2 },
-  'samual.salvator61@gmail.com': { referrals: 9, vouchers: 2 },
+  'samual.salvator61@gmail.com': { referrals: 10, vouchers: 3 },
   'grgkamal777@gmail.com': { referrals: 6, vouchers: 5 },
-  'kimberlymatan80@gmail.com': { referrals: 7, vouchers: 0 },
+  'kimberlymatan80@gmail.com': { referrals: 10, vouchers: 1 },
   'nymphrai01@gmail.com': { referrals: 1, vouchers: 0 },
   'rajusubedimala@gmail.com': { referrals: 32, vouchers: 22 },
   'raii.aditi01@gmail.com': { referrals: 1, vouchers: 0 },
   'bernadete.francia@gmail.com': { referrals: 9, vouchers: 5 },
-  'nurainibassam34@gmail.com': { referrals: 10, vouchers: 2 },
-  'wimonwankitiyayam@gmail.com': { referrals: 5, vouchers: 1 },
+  'nurainibassam34@gmail.com': { referrals: 12, vouchers: 2 },
+  'wimonwankitiyayam@gmail.com': { referrals: 10, vouchers: 4 },
   'christianjpadua@gmail.com': { referrals: 1, vouchers: 1 },
-  'kellisip08@gmail.com': { referrals: 11, vouchers: 1 },
-  'omonuwabest00@gmail.com': { referrals: 1, vouchers: 0 },
+  'kellisip08@gmail.com': { referrals: 14, vouchers: 1 },
+  'omonuwabest00@gmail.com': { referrals: 8, vouchers: 2 },
   'lenykc@gmail.com': { referrals: 1, vouchers: 1 },
-  'limbu.neeyara123@gmail.com': { referrals: 10, vouchers: 1 },
-  'punmarina99852@gmail.com': { referrals: 12, vouchers: 7 },
+  'limbu.neeyara123@gmail.com': { referrals: 14, vouchers: 4 },
+  'punmarina99852@gmail.com': { referrals: 15, vouchers: 10 },
   'chadanigauchan@gmail.com': { referrals: 3, vouchers: 3 },
   'sharmaanita2746@gmail.com': { referrals: 3, vouchers: 1 },
   'veegabion@gmail.com': { referrals: 3, vouchers: 3 },
@@ -67,7 +74,7 @@ const updates = {
   'dewansujasna22@gmail.com': { referrals: 2, vouchers: 1 },
   'melndm@yahoo.com': { referrals: 1, vouchers: 0 },
   'nozomitsuchiya092218@gmail.com': { referrals: 1, vouchers: 0 },
-  'mimosa.summerholics@gmail.com': { referrals: 8, vouchers: 2 },
+  'mimosa.summerholics@gmail.com': { referrals: 13, vouchers: 2 },
 };
 
 const monthKey = '2026-08';
