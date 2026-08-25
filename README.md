@@ -12,7 +12,9 @@ A monthly, branch-by-branch referral leaderboard for Carnivore Club FOH staff, b
 Managers (Manager, Assistant Manager, Restaurant Manager, Floor Manager, and the AM/RM/BM role codes) are excluded from the competition.
 
 ## Refreshing the data
-This is a static snapshot. To refresh with new Eber data, re-pull the Referral Transactions report (Eber XM → Insights → Referral → Referral Transactions, All Time), update the transaction list and staff export, regenerate `data/dashboard_data.json`, and rebuild `index.html`.
+This is currently a static snapshot, refreshed manually: re-pull the Referral Transactions report (Eber XM → Insights → Referral → Referral Transactions, All Time), update the transaction list and staff export, regenerate `data/dashboard_data.json`, and rebuild `index.html`.
+
+**In progress:** an unattended Python/Playwright script to automate this pull on a schedule, since Eber XM has no API or webhooks. See `EBER_LIVE_DASHBOARD_PROGRESS.md` in the parent `Carnivore_Club` folder for the current plan, decisions made, and next steps.
 
 ## Deploying
 This is a single self-contained `index.html` — no build step. Deploy as a static site on Vercel (or any static host).
