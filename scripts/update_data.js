@@ -46,29 +46,32 @@ for (const s of d.staff) {
 }
 
 // email -> { referrals, vouchers }, staff-matched rows only (non-staff / team
-// account / customer word-of-mouth codes excluded). Counted directly from the
-// Aug 1-25 transaction export by REFERRAL EMAIL, plus 6 manually-verified
-// referrals from the sheet's "Untracked" tab (Anita +1, Raju +3, Aia +1,
-// Ramos +1) that still do not appear anywhere in Eber's own export even now -
-// confirmed by searching the fresh export for all 4 untracked referee
+// account / customer word-of-mouth codes excluded). Baseline counted from the
+// Aug 1-25 (through 09:57) transaction export by REFERRAL EMAIL, plus 6
+// manually-verified referrals from the sheet's "Untracked" tab (Anita +1,
+// Raju +3, Aia +1, Ramos +1) that still do not appear anywhere in Eber's own
+// export even now - confirmed by searching for all 4 untracked referee
 // addresses and finding none of them, so this is a genuine gap in Eber's
-// system, not a timing/pagination issue.
+// system, not a timing/pagination issue. Updated again with a second export
+// (job_id_120115, transaction IDs 606544-607090) covering Aug 24 09:57
+// through Aug 25 21:21 - all 48 new rows matched staff, no unattributed
+// accounts this round.
 const updates = {
-  'jesycabatbat@gmail.com': { referrals: 1, vouchers: 1 },
+  'jesycabatbat@gmail.com': { referrals: 2, vouchers: 1 },
   'kimberlymatan80@gmail.com': { referrals: 10, vouchers: 1 },
   'omonuwabest00@gmail.com': { referrals: 8, vouchers: 2 },
   'nymphrai01@gmail.com': { referrals: 1, vouchers: 0 },
-  'roqueaia415@gmail.com': { referrals: 40, vouchers: 27 },
-  'rajusubedimala@gmail.com': { referrals: 47, vouchers: 30 },
-  'kangmang456@icloud.com': { referrals: 6, vouchers: 4 },
-  'chadanigauchan@gmail.com': { referrals: 4, vouchers: 4 },
-  'limbu.neeyara123@gmail.com': { referrals: 14, vouchers: 4 },
+  'roqueaia415@gmail.com': { referrals: 47, vouchers: 32 },
+  'rajusubedimala@gmail.com': { referrals: 61, vouchers: 39 },
+  'kangmang456@icloud.com': { referrals: 17, vouchers: 12 },
+  'chadanigauchan@gmail.com': { referrals: 5, vouchers: 4 },
+  'limbu.neeyara123@gmail.com': { referrals: 15, vouchers: 4 },
   'punmarina99852@gmail.com': { referrals: 17, vouchers: 12 },
-  'benedictbuendia3@gmail.com': { referrals: 44, vouchers: 19 },
+  'benedictbuendia3@gmail.com': { referrals: 45, vouchers: 19 },
   'samual.salvator61@gmail.com': { referrals: 10, vouchers: 3 },
-  'brivajustin@gmail.com': { referrals: 77, vouchers: 28 },
+  'brivajustin@gmail.com': { referrals: 78, vouchers: 28 },
   'dewansujasna22@gmail.com': { referrals: 2, vouchers: 1 },
-  'sharmaanita2746@gmail.com': { referrals: 7, vouchers: 1 },
+  'sharmaanita2746@gmail.com': { referrals: 8, vouchers: 2 },
   'grgkamal777@gmail.com': { referrals: 17, vouchers: 10 },
   'christianjpadua@gmail.com': { referrals: 1, vouchers: 1 },
   'nozomitsuchiya092218@gmail.com': { referrals: 1, vouchers: 0 },
@@ -76,14 +79,16 @@ const updates = {
   'lenykc@gmail.com': { referrals: 6, vouchers: 4 },
   'kellisip08@gmail.com': { referrals: 14, vouchers: 1 },
   'bhabeangeles@gmail.com': { referrals: 16, vouchers: 0 },
-  'shiela.may.calbario@gmail.com': { referrals: 14, vouchers: 2 },
-  'raii.aditi01@gmail.com': { referrals: 1, vouchers: 0 },
+  'shiela.may.calbario@gmail.com': { referrals: 17, vouchers: 2 },
+  'raii.aditi01@gmail.com': { referrals: 3, vouchers: 2 },
   'bernadete.francia@gmail.com': { referrals: 9, vouchers: 5 },
   'mimosa.summerholics@gmail.com': { referrals: 14, vouchers: 2 },
   'veegabion@gmail.com': { referrals: 3, vouchers: 3 },
-  'nurainibassam34@gmail.com': { referrals: 14, vouchers: 2 },
+  'nurainibassam34@gmail.com': { referrals: 15, vouchers: 2 },
   'princessjaireen17michelle@gmail.com': { referrals: 10, vouchers: 3 },
   'melndm@yahoo.com': { referrals: 1, vouchers: 0 },
+  'harronbumagat1@gmail.com': { referrals: 3, vouchers: 2 },
+  'rob.doctura@gmail.com': { referrals: 1, vouchers: 0 },
 };
 
 const monthKey = '2026-08';

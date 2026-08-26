@@ -57,16 +57,13 @@ const branchRanked = branchOrder
   .map(name => ({ name, ...d.branch_summary_current[name] }))
   .sort((a, b) => b.referrals - a.referrals); // stable: JS sort is stable, ties keep branchOrder order
 
-const maxBranchReferrals = Math.max(...branchRanked.map(b => b.referrals), 1);
 const medals = ['gold', 'silver', 'bronze'];
 const medalIcons = ['🥇', '🥈', '🥉'];
 
 const branchListHtml = branchRanked.map((b, i) => {
-  const rankBadge = i < 3
-    ? `<div class="rank-badge ${medals[i]}">${medalIcons[i]}</div>`
-    : `<div class="rank-badge${b.referrals === 0 ? ' muted-badge' : ''}">${i + 1}</div>`;
-  const width = Math.round(b.referrals / maxBranchReferrals * 100);
-  const targetShare = pct(b.referrals, d.store_targets[b.name]);
+  const target = d.store_targets[b.name];
+  const targetShare = pct(b.referrals, target);
+  const targetMet = b.referrals >= target;
   const emptyNote = b.referrals === 0
     ? `\n          <div class="empty-note">No referrals logged yet this month. First one on the board wins bragging rights 👀</div>`
     : '';
@@ -77,22 +74,23 @@ const branchListHtml = branchRanked.map((b, i) => {
         <div class="branch-main">
           <div class="branch-name-line">
             <span class="branch-name">${esc(b.name)}</span>
-            <span class="branch-sub">${b.active_referrers} of ${b.total_staff} staff on the board</span>
+            <span class="branch-sub">${b.active_referrers} of ${b.total_staff} staff on the board · target ${target.toLocaleString()}/mo</span>
           </div>
-          <div class="track"><div class="fill" style="width:${width}%"></div></div>${emptyNote}
+          <div class="track"><div class="fill" style="width:${Math.min(Number(targetShare), 100)}%"></div></div>${emptyNote}
         </div>
         <div class="branch-stats">
           <div class="lb-count">${b.referrals}</div>
           <div class="lb-count-label">${label}</div>
           <div class="lb-value">${value}</div>
-          <div class="lb-target">${targetShare}% of target</div>
+          <div class="target-badge${targetMet ? ' met' : ''}">${targetShare}% of target</div>
         </div>
       </li>`;
 }).join('\n');
 
-// ---------- Top referrers ----------
-const topHtml = ranked.map((s, i) => {
-  const rankBadge = i < 3 ? `<div class="rank-badge ${medals[i]}">${medalIcons[i]}</div>` : `<div class="rank-badge">${i + 1}</div>`;
+// ---------- Top referrers (top 3 only) ----------
+const top3 = ranked.slice(0, 3);
+const topHtml = top3.map((s, i) => {
+  const rankBadge = `<div class="rank-badge ${medals[i]}">${medalIcons[i]}</div>`;
   const width = Math.round(s.referrals_this_month / ranked[0].referrals_this_month * 100);
   const label = s.referrals_this_month === 1 ? 'referral' : 'referrals';
   return `      <li class="lb-row">
@@ -112,31 +110,6 @@ const topHtml = ranked.map((s, i) => {
         </div>
       </li>`;
 }).join('\n');
-
-// ---------- Analytics table ----------
-const analyticsRows = branchOrder.map(name => {
-  const b = d.branch_summary_current[name];
-  const target = d.store_targets[name];
-  const share = pct(b.referrals, target);
-  const barWidth = Math.round(b.referrals / target * 100);
-  return `      <tr>
-        <td class="col-name">${esc(name)}</td>
-        <td class="col-num">${target}</td>
-        <td class="col-num">${b.referrals}</td>
-        <td class="col-num">${share}%</td>
-        <td class="col-bar"><div class="track track-sm"><div class="fill" style="width:${barWidth}%"></div></div></td>
-      </tr>`;
-}).join('\n');
-
-const totalTarget = Object.values(d.store_targets).reduce((a, b) => a + b, 0);
-const totalShare = pct(monthStats.referrals, totalTarget);
-const analyticsFoot = `        <tr>
-            <td class="col-name"><strong>TOTAL</strong></td>
-            <td class="col-num"><strong>${totalTarget.toLocaleString()}</strong></td>
-            <td class="col-num"><strong>${monthStats.referrals}</strong></td>
-            <td class="col-num"><strong>${totalShare}%</strong></td>
-            <td></td>
-          </tr>`;
 
 // ---------- Monthly trend ----------
 const monthKeys = Object.keys(d.monthly).sort();
@@ -200,8 +173,6 @@ html = replaceBetween(html, '<div class="kpi-grid">', '\n  </div>', kpiHtml);
 html = replaceBetween(html, '<!-- MVP_START -->', '<!-- MVP_END -->', mvpHtml);
 html = replaceBetween(html, '<ul class="branch-list">', '\n    </ul>', '\n' + branchListHtml + '\n    ');
 html = replaceBetween(html, '<ul class="lb-list">', '\n    </ul>', '\n' + topHtml + '\n    ');
-html = replaceBetween(html, '<tbody>\n', '</tbody>\n        <tfoot>', analyticsRows + '\n      ');
-html = replaceBetween(html, '<tfoot>\n', '</tfoot>', '          ' + analyticsFoot.trim() + '\n        ');
 html = replaceBetween(html, '<div class="trend-row">', '\n      </div>', '\n' + trendHtml + '\n      ');
 html = html.replace(/<div class="section-hint">Only one month on record so far\..*?<\/div>/,
   `<div class="section-hint">${esc(trendHint)}</div>`);
@@ -210,7 +181,7 @@ html = replaceBetween(html, '<!-- ROSTER_START -->', '<!-- ROSTER_END -->', '\n'
 // Update month-title headings and meta line
 html = html.replace(/Showing [A-Za-z]+ \d{4} · resets each month/, `Showing ${esc(monthName)} · resets each month`);
 html = html.replace(/Branch leaderboard · [A-Za-z]+ \d{4}/, `Branch leaderboard · ${esc(monthName)}`);
-html = html.replace(/Top referrers · [A-Za-z]+ \d{4}/, `Top referrers · ${esc(monthName)}`);
+html = html.replace(/Top 3 referrers · [A-Za-z]+ \d{4}/, `Top 3 referrers · ${esc(monthName)}`);
 html = html.replace(/Full roster by branch · [A-Za-z]+ \d{4}/, `Full roster by branch · ${esc(monthName)}`);
 
 fs.writeFileSync(htmlPath, html);
