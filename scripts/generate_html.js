@@ -87,27 +87,18 @@ const branchListHtml = branchRanked.map((b, i) => {
       </li>`;
 }).join('\n');
 
-// ---------- Top referrers (top 3 only) ----------
+// ---------- Top referrers (top 3 only, condensed podium) ----------
 const top3 = ranked.slice(0, 3);
 const topHtml = top3.map((s, i) => {
-  const rankBadge = `<div class="rank-badge ${medals[i]}">${medalIcons[i]}</div>`;
-  const width = Math.round(s.referrals_this_month / ranked[0].referrals_this_month * 100);
   const label = s.referrals_this_month === 1 ? 'referral' : 'referrals';
-  return `      <li class="lb-row">
-        ${rankBadge}
+  return `      <li class="top3-card">
+        <div class="rank-badge ${medals[i]}">${medalIcons[i]}</div>
         <div class="avatar">${esc(s.display_name[0])}</div>
-        <div class="lb-main">
-          <div class="lb-name-line">
-            <span class="lb-name">${esc(s.display_name)}</span>
-          </div>
-          <div class="lb-meta">${esc(s.branch)} · ${esc(s.role)}</div>
-          <div class="track"><div class="fill" style="width:${width}%"></div></div>
-        </div>
-        <div class="lb-stats">
-          <div class="lb-count">${s.referrals_this_month}</div>
-          <div class="lb-count-label">${label}</div>
-          <div class="lb-value">HKD ${s.bonus_this_month} bonus</div>
-        </div>
+        <div class="top3-name">${esc(s.display_name)}</div>
+        <div class="top3-meta">${esc(s.branch)} · ${esc(s.role)}</div>
+        <div class="top3-count">${s.referrals_this_month}</div>
+        <div class="top3-count-label">${label}</div>
+        <div class="top3-value">HKD ${s.bonus_this_month} bonus</div>
       </li>`;
 }).join('\n');
 
@@ -172,7 +163,7 @@ function replaceBetween(html, startMarker, endMarker, newInner) {
 html = replaceBetween(html, '<div class="kpi-grid">', '\n  </div>', kpiHtml);
 html = replaceBetween(html, '<!-- MVP_START -->', '<!-- MVP_END -->', mvpHtml);
 html = replaceBetween(html, '<ul class="branch-list">', '\n    </ul>', '\n' + branchListHtml + '\n    ');
-html = replaceBetween(html, '<ul class="lb-list">', '\n    </ul>', '\n' + topHtml + '\n    ');
+html = replaceBetween(html, '<ul class="top3-grid">', '\n    </ul>', '\n' + topHtml + '\n    ');
 html = replaceBetween(html, '<div class="trend-row">', '\n      </div>', '\n' + trendHtml + '\n      ');
 html = html.replace(/<div class="section-hint">Only one month on record so far\..*?<\/div>/,
   `<div class="section-hint">${esc(trendHint)}</div>`);
@@ -183,6 +174,7 @@ html = html.replace(/Showing [A-Za-z]+ \d{4} · resets each month/, `Showing ${e
 html = html.replace(/Branch leaderboard · [A-Za-z]+ \d{4}/, `Branch leaderboard · ${esc(monthName)}`);
 html = html.replace(/Top 3 referrers · [A-Za-z]+ \d{4}/, `Top 3 referrers · ${esc(monthName)}`);
 html = html.replace(/Full roster by branch · [A-Za-z]+ \d{4}/, `Full roster by branch · ${esc(monthName)}`);
+html = html.replace(/<p class="last-updated">Last updated .*?<\/p>/, `<p class="last-updated">Last updated ${esc(d.last_updated)}</p>`);
 
 fs.writeFileSync(htmlPath, html);
 console.log('index.html regenerated.');

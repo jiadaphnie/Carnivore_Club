@@ -83,6 +83,11 @@
     color: var(--text-secondary);
     font-size: 14px;
   }
+  .title-block p.last-updated {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 3px;
+  }
   .theme-toggle {
     border: 1px solid var(--border);
     background: var(--surface-1);
@@ -274,6 +279,32 @@
   }
   .target-badge.met { background: var(--good-soft); color: var(--good-text); }
 
+  ul.top3-grid {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .top3-card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 10px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2px;
+  }
+  .top3-card .rank-badge { margin-bottom: 4px; }
+  .top3-card .avatar { margin-bottom: 2px; }
+  .top3-name { font-weight: 600; font-size: 14px; }
+  .top3-meta { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+  .top3-count { font-size: 22px; font-weight: 700; line-height: 1.1; }
+  .top3-count-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .top3-value { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
   details.branch-detail {
     background: var(--surface-1);
     border: 1px solid var(--border);
@@ -384,6 +415,7 @@
     .mvp-card { flex-wrap: wrap; padding: 14px 16px; }
     .mvp-stats { width: 100%; justify-content: space-between; gap: 12px; }
     .branch-card, .lb-row { padding: 10px 10px; gap: 10px; }
+    ul.top3-grid { grid-template-columns: 1fr; }
     .branch-stats, .lb-stats { min-width: 62px; }
     .lb-count, .branch-stats .lb-count { font-size: 16px; }
     table.roster-table { font-size: 12px; }
@@ -400,6 +432,7 @@
     <div class="title-block">
       <h1>🥩 Referral Leaderboard</h1>
       <p>Carnivore Club FOH · who's bringing in new members, by branch</p>
+      <p class="last-updated">Last updated 26 Aug 2026</p>
     </div>
     <button class="theme-toggle" onclick="toggleTheme()">🌓 Toggle theme</button>
   </header>
@@ -437,6 +470,41 @@
         </div>
       </div>
 <!-- MVP_END -->
+  <section>
+    <h2>Top 3 referrers · August 2026</h2>
+    <div class="section-hint">Top 3 referrers this month, ranked by referrals, then by bonus earned.</div>
+    <ul class="top3-grid">
+      <li class="top3-card">
+        <div class="rank-badge gold">🥇</div>
+        <div class="avatar">J</div>
+        <div class="top3-name">Justin</div>
+        <div class="top3-meta">FIS - Soho · Supervisor</div>
+        <div class="top3-count">78</div>
+        <div class="top3-count-label">referrals</div>
+        <div class="top3-value">HKD 780 bonus</div>
+      </li>
+      <li class="top3-card">
+        <div class="rank-badge silver">🥈</div>
+        <div class="avatar">R</div>
+        <div class="top3-name">Raju</div>
+        <div class="top3-meta">FIS - IFC · Server</div>
+        <div class="top3-count">61</div>
+        <div class="top3-count-label">referrals</div>
+        <div class="top3-value">HKD 610 bonus</div>
+      </li>
+      <li class="top3-card">
+        <div class="rank-badge bronze">🥉</div>
+        <div class="avatar">A</div>
+        <div class="top3-name">Aia</div>
+        <div class="top3-meta">FIS - IFC · Server</div>
+        <div class="top3-count">47</div>
+        <div class="top3-count-label">referrals</div>
+        <div class="top3-value">HKD 470 bonus</div>
+      </li>
+    
+    </ul>
+  </section>
+
   <section>
     <h2>Branch leaderboard · August 2026</h2>
     <div class="section-hint">Ranked by referrals this month, with each branch's share of its monthly sign-up target. Every branch starts back at zero next month.</div>
@@ -655,62 +723,6 @@
   </section>
 
   <section>
-    <h2>Top 3 referrers · August 2026</h2>
-    <div class="section-hint">Top 3 referrers this month, ranked by referrals, then by bonus earned.</div>
-    <ul class="lb-list">
-      <li class="lb-row">
-        <div class="rank-badge gold">🥇</div>
-        <div class="avatar">J</div>
-        <div class="lb-main">
-          <div class="lb-name-line">
-            <span class="lb-name">Justin</span>
-          </div>
-          <div class="lb-meta">FIS - Soho · Supervisor</div>
-          <div class="track"><div class="fill" style="width:100%"></div></div>
-        </div>
-        <div class="lb-stats">
-          <div class="lb-count">78</div>
-          <div class="lb-count-label">referrals</div>
-          <div class="lb-value">HKD 780 bonus</div>
-        </div>
-      </li>
-      <li class="lb-row">
-        <div class="rank-badge silver">🥈</div>
-        <div class="avatar">R</div>
-        <div class="lb-main">
-          <div class="lb-name-line">
-            <span class="lb-name">Raju</span>
-          </div>
-          <div class="lb-meta">FIS - IFC · Server</div>
-          <div class="track"><div class="fill" style="width:78%"></div></div>
-        </div>
-        <div class="lb-stats">
-          <div class="lb-count">61</div>
-          <div class="lb-count-label">referrals</div>
-          <div class="lb-value">HKD 610 bonus</div>
-        </div>
-      </li>
-      <li class="lb-row">
-        <div class="rank-badge bronze">🥉</div>
-        <div class="avatar">A</div>
-        <div class="lb-main">
-          <div class="lb-name-line">
-            <span class="lb-name">Aia</span>
-          </div>
-          <div class="lb-meta">FIS - IFC · Server</div>
-          <div class="track"><div class="fill" style="width:60%"></div></div>
-        </div>
-        <div class="lb-stats">
-          <div class="lb-count">47</div>
-          <div class="lb-count-label">referrals</div>
-          <div class="lb-value">HKD 470 bonus</div>
-        </div>
-      </li>
-    
-    </ul>
-  </section>
-
-  <section>
     <h2>Monthly trend</h2>
     <div class="section-hint">Only one month on record so far. This chart will fill in as more months of referral data come through Eber.</div>
     <div class="trend-card">
@@ -721,6 +733,8 @@
         </div>
         <div class="trend-value">469</div>
         <div class="trend-label">August 2026</div>
+      </div>
+      
       </div>
       
       </div>

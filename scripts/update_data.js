@@ -128,5 +128,9 @@ d.monthly[monthKey] = {
   active_referrers: activeReferrers,
 };
 
+// Records when this data was last regenerated (i.e. when this script was run),
+// not the timestamp of the latest underlying Eber transaction.
+d.last_updated = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
 fs.writeFileSync(dataPath, JSON.stringify(d, null, 2) + '\n');
 console.log('Updated. Total referrals:', totalReferrals, 'Active referrers:', activeReferrers);
