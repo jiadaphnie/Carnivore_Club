@@ -83,10 +83,19 @@ if (!d.staff.some(s => s.email === 'shamita.bhandari30@gmail.com')) {
 // (job_id_120115, transaction IDs 606544-607090) covering Aug 24 09:57
 // through Aug 25 21:21 - all 48 new rows matched staff, no unattributed
 // accounts this round.
+//
+// A further 19 untracked referrals were reported directly by the TLF
+// manager (a "Membership Signup Email" listing referee emails per staff).
+// Cross-checked every listed referee email against both raw Eber exports
+// before adding anything: Best's all 7 were already fully accounted for
+// (not double-counted), Kim had 2 of 4 already tracked (added the other 2),
+// Jess's 9 and Karishma's 8 were entirely absent from Eber - none were
+// found attributed to a different referrer either, so no conflicts.
 const updates = {
   'shamita.bhandari30@gmail.com': { referrals: 5, vouchers: 4 },
-  'jesycabatbat@gmail.com': { referrals: 2, vouchers: 1 },
-  'kimberlymatan80@gmail.com': { referrals: 10, vouchers: 1 },
+  'jesycabatbat@gmail.com': { referrals: 11, vouchers: 1 },
+  'kimberlymatan80@gmail.com': { referrals: 12, vouchers: 1 },
+  'karishmarai833@gmail.com': { referrals: 8, vouchers: 0 },
   'omonuwabest00@gmail.com': { referrals: 8, vouchers: 2 },
   'nymphrai01@gmail.com': { referrals: 1, vouchers: 0 },
   'roqueaia415@gmail.com': { referrals: 47, vouchers: 32 },
