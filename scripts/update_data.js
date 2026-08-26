@@ -91,11 +91,24 @@ if (!d.staff.some(s => s.email === 'shamita.bhandari30@gmail.com')) {
 // (not double-counted), Kim had 2 of 4 already tracked (added the other 2),
 // Jess's 9 and Karishma's 8 were entirely absent from Eber - none were
 // found attributed to a different referrer either, so no conflicts.
+//
+// Of those 19, individually searched each one in Eber's own People/
+// Consumers database (not just the transactions export) to confirm they're
+// real registered members. 11 returned zero results - no Eber account
+// exists under those emails at all - so per the user's decision they are
+// NOT counted as valid referrals: Kim -2 (isahuiowo@gmail.com,
+// 1713223231@99.com), Jess -4 (yonghong2024@gmail.com,
+// remce_tsang@yahoo.com.hk, cecilialokyee@yahoo.com, chansuny2@hotmail.com),
+// Karishma -5 (dlyyyychrisre@gmail.com, sarah.ny.poon@gmail.com,
+// kapoernanya213@gmail.com, justison1@gmail.com, jimmy094@dontsp.am - the
+// last uses a disposable email domain). The remaining 8 (Kim's other 0,
+// Jess's other 5, Karishma's other 3) ARE real Eber members with a
+// verified Member Since date and stay counted.
 const updates = {
   'shamita.bhandari30@gmail.com': { referrals: 5, vouchers: 4 },
-  'jesycabatbat@gmail.com': { referrals: 11, vouchers: 1 },
-  'kimberlymatan80@gmail.com': { referrals: 12, vouchers: 1 },
-  'karishmarai833@gmail.com': { referrals: 8, vouchers: 0 },
+  'jesycabatbat@gmail.com': { referrals: 7, vouchers: 1 },
+  'kimberlymatan80@gmail.com': { referrals: 10, vouchers: 1 },
+  'karishmarai833@gmail.com': { referrals: 3, vouchers: 0 },
   'omonuwabest00@gmail.com': { referrals: 8, vouchers: 2 },
   'nymphrai01@gmail.com': { referrals: 1, vouchers: 0 },
   'roqueaia415@gmail.com': { referrals: 47, vouchers: 32 },

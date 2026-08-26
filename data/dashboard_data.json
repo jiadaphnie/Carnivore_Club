@@ -23,14 +23,14 @@
       "email": "jesycabatbat@gmail.com",
       "is_manager": false,
       "display_name": "Marilyn",
-      "referrals": 11,
-      "bonus": 110,
+      "referrals": 7,
+      "bonus": 70,
       "vouchers": 1,
       "by_month": {
-        "2026-08": 11
+        "2026-08": 7
       },
-      "referrals_this_month": 11,
-      "bonus_this_month": 110
+      "referrals_this_month": 7,
+      "bonus_this_month": 70
     },
     {
       "branch": "TLF",
@@ -55,14 +55,14 @@
       "email": "kimberlymatan80@gmail.com",
       "is_manager": false,
       "display_name": "Kim",
-      "referrals": 12,
-      "bonus": 120,
+      "referrals": 10,
+      "bonus": 100,
       "vouchers": 1,
       "by_month": {
-        "2026-08": 12
+        "2026-08": 10
       },
-      "referrals_this_month": 12,
-      "bonus_this_month": 120
+      "referrals_this_month": 10,
+      "bonus_this_month": 100
     },
     {
       "branch": "TLF",
@@ -89,14 +89,14 @@
       "email": "karishmarai833@gmail.com",
       "is_manager": false,
       "display_name": "Karishma",
-      "referrals": 8,
-      "bonus": 80,
+      "referrals": 3,
+      "bonus": 30,
       "vouchers": 0,
       "by_month": {
-        "2026-08": 8
+        "2026-08": 3
       },
-      "referrals_this_month": 8,
-      "bonus_this_month": 80
+      "referrals_this_month": 3,
+      "bonus_this_month": 30
     },
     {
       "branch": "FIS - Causeway Bay",
@@ -1092,8 +1092,8 @@
   "branch_summary_current": {
     "TLF": {
       "total_staff": 6,
-      "referrals": 39,
-      "bonus": 390,
+      "referrals": 28,
+      "bonus": 280,
       "active_referrers": 4
     },
     "FIS - Causeway Bay": {
@@ -1171,8 +1171,8 @@
   },
   "monthly": {
     "2026-08": {
-      "referrals": 493,
-      "bonus": 4930,
+      "referrals": 482,
+      "bonus": 4820,
       "active_referrers": 34
     }
   },
