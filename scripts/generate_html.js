@@ -33,24 +33,9 @@ const kpiHtml = `
       <div class="kpi-label">Staff on the board</div>
     </div>`;
 
-// ---------- MVP card ----------
+// ---------- Top 3 referrers (MVP-card style) ----------
 const ranked = d.staff.filter(s => s.referrals_this_month > 0)
   .sort((a, b) => b.referrals_this_month - a.referrals_this_month || b.bonus_this_month - a.bonus_this_month);
-const mvp = ranked[0];
-const mvpHtml = mvp ? `
-      <div class="mvp-card">
-        <div class="mvp-avatar">${esc(mvp.display_name[0])}</div>
-        <div class="mvp-info">
-          <div class="mvp-label">👑 ${esc(monthName)} MVP</div>
-          <div class="mvp-name">${esc(mvp.display_name)}</div>
-          <div class="mvp-meta">${esc(mvp.branch)} · ${esc(mvp.role)}</div>
-        </div>
-        <div class="mvp-stats">
-          <div class="mvp-stat"><div class="mvp-stat-value">${mvp.referrals_this_month}</div><div class="mvp-stat-label">referrals</div></div>
-          <div class="mvp-stat"><div class="mvp-stat-value">HKD ${mvp.bonus_this_month}</div><div class="mvp-stat-label">referral bonus</div></div>
-        </div>
-      </div>
-` : '';
 
 // ---------- Branch leaderboard ----------
 const branchRanked = branchOrder
@@ -87,19 +72,22 @@ const branchListHtml = branchRanked.map((b, i) => {
       </li>`;
 }).join('\n');
 
-// ---------- Top referrers (top 3 only, condensed podium) ----------
+// ---------- Top referrers (top 3 only, MVP-card style) ----------
 const top3 = ranked.slice(0, 3);
+const avatarClass = ['', ' silver', ' bronze'];
 const topHtml = top3.map((s, i) => {
-  const label = s.referrals_this_month === 1 ? 'referral' : 'referrals';
-  return `      <li class="top3-card">
-        <div class="rank-badge ${medals[i]}">${medalIcons[i]}</div>
-        <div class="avatar">${esc(s.display_name[0])}</div>
-        <div class="top3-name">${esc(s.display_name)}</div>
-        <div class="top3-meta">${esc(s.branch)} · ${esc(s.role)}</div>
-        <div class="top3-count">${s.referrals_this_month}</div>
-        <div class="top3-count-label">${label}</div>
-        <div class="top3-value">HKD ${s.bonus_this_month} bonus</div>
-      </li>`;
+  return `      <div class="mvp-card">
+        <div class="mvp-avatar${avatarClass[i]}">${esc(s.display_name[0])}</div>
+        <div class="mvp-info">
+          <div class="mvp-label">${medalIcons[i]} #${i + 1} · ${esc(monthName)}</div>
+          <div class="mvp-name">${esc(s.display_name)}</div>
+          <div class="mvp-meta">${esc(s.branch)} · ${esc(s.role)}</div>
+        </div>
+        <div class="mvp-stats">
+          <div class="mvp-stat"><div class="mvp-stat-value">${s.referrals_this_month}</div><div class="mvp-stat-label">referrals</div></div>
+          <div class="mvp-stat"><div class="mvp-stat-value">HKD ${s.bonus_this_month}</div><div class="mvp-stat-label">referral bonus</div></div>
+        </div>
+      </div>`;
 }).join('\n');
 
 // ---------- Monthly trend ----------
@@ -161,9 +149,8 @@ function replaceBetween(html, startMarker, endMarker, newInner) {
 }
 
 html = replaceBetween(html, '<div class="kpi-grid">', '\n  </div>', kpiHtml);
-html = replaceBetween(html, '<!-- MVP_START -->', '<!-- MVP_END -->', mvpHtml);
+html = replaceBetween(html, '<!-- MVP_START -->', '<!-- MVP_END -->', '\n' + topHtml + '\n');
 html = replaceBetween(html, '<ul class="branch-list">', '\n    </ul>', '\n' + branchListHtml + '\n    ');
-html = replaceBetween(html, '<ul class="top3-grid">', '\n    </ul>', '\n' + topHtml + '\n    ');
 html = replaceBetween(html, '<div class="trend-row">', '\n      </div>', '\n' + trendHtml + '\n      ');
 html = html.replace(/<div class="section-hint">Only one month on record so far\..*?<\/div>/,
   `<div class="section-hint">${esc(trendHint)}</div>`);
