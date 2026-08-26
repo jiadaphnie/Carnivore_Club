@@ -45,6 +45,33 @@ for (const s of d.staff) {
   }
 }
 
+// New staff member reported by the user (not yet in the FOH Staff Directory
+// sheet at the time of this pull): Samita Bhandari, FIS - Soho,
+// shamita.bhandari30@gmail.com. Her 5 referrals (Aug 20-21, code WS08HS) had
+// been sitting unattributed as a non-staff "customer" account since she
+// wasn't in the roster yet. Role defaulted to "Server" (most common role on
+// this branch) since it wasn't specified - confirm/correct if wrong.
+if (!d.staff.some(s => s.email === 'shamita.bhandari30@gmail.com')) {
+  d.staff.push({
+    branch: 'FIS - Soho',
+    full_name: 'Samita Bhandari',
+    role: 'Server',
+    preferred_name: 'Samita',
+    email: 'shamita.bhandari30@gmail.com',
+    is_manager: false,
+    display_name: 'Samita',
+    referrals: 0,
+    bonus: 0,
+    vouchers: 0,
+    by_month: {},
+    referrals_this_month: 0,
+    bonus_this_month: 0,
+  });
+  // total_staff isn't derived from d.staff.length elsewhere in this script,
+  // so it has to be bumped here too or "X of Y staff on the board" is wrong.
+  d.branch_summary_current['FIS - Soho'].total_staff += 1;
+}
+
 // email -> { referrals, vouchers }, staff-matched rows only (non-staff / team
 // account / customer word-of-mouth codes excluded). Baseline counted from the
 // Aug 1-25 (through 09:57) transaction export by REFERRAL EMAIL, plus 6
@@ -57,6 +84,7 @@ for (const s of d.staff) {
 // through Aug 25 21:21 - all 48 new rows matched staff, no unattributed
 // accounts this round.
 const updates = {
+  'shamita.bhandari30@gmail.com': { referrals: 5, vouchers: 4 },
   'jesycabatbat@gmail.com': { referrals: 2, vouchers: 1 },
   'kimberlymatan80@gmail.com': { referrals: 10, vouchers: 1 },
   'omonuwabest00@gmail.com': { referrals: 8, vouchers: 2 },

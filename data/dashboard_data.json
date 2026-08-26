@@ -1068,6 +1068,23 @@
       "by_month": {},
       "referrals_this_month": 0,
       "bonus_this_month": 0
+    },
+    {
+      "branch": "FIS - Soho",
+      "full_name": "Samita Bhandari",
+      "role": "Server",
+      "preferred_name": "Samita",
+      "email": "shamita.bhandari30@gmail.com",
+      "is_manager": false,
+      "display_name": "Samita",
+      "referrals": 5,
+      "bonus": 50,
+      "vouchers": 4,
+      "by_month": {
+        "2026-08": 5
+      },
+      "referrals_this_month": 5,
+      "bonus_this_month": 50
     }
   ],
   "branch_summary_current": {
@@ -1096,10 +1113,10 @@
       "active_referrers": 3
     },
     "FIS - Soho": {
-      "total_staff": 5,
-      "referrals": 133,
-      "bonus": 1330,
-      "active_referrers": 3
+      "total_staff": 6,
+      "referrals": 138,
+      "bonus": 1380,
+      "active_referrers": 4
     },
     "FIS - TST": {
       "total_staff": 6,
@@ -1152,9 +1169,9 @@
   },
   "monthly": {
     "2026-08": {
-      "referrals": 469,
-      "bonus": 4690,
-      "active_referrers": 32
+      "referrals": 474,
+      "bonus": 4740,
+      "active_referrers": 33
     }
   },
   "month_names": {
