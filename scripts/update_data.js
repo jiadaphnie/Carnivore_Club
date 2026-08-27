@@ -43,6 +43,13 @@ for (const s of d.staff) {
   if (s.email === 'benedictbuendia@gmail.com') {
     s.email = 'benedictbuendia3@gmail.com';
   }
+  // Safran Lance Angelo B., FIS - Wan Chai, had a blank email (same pattern as
+  // Tanny/Leny) - the Aug 26 export showed 2 referrals under referral code
+  // "BEEF" / referrer name "Angelo Safran", which matches his name closely
+  // enough (Lance Angelo Safran) to attribute with confidence.
+  if (s.full_name === 'Safran Lance Angelo B.' && !s.email) {
+    s.email = 'lanceangelo2001@gmail.com';
+  }
 }
 
 // New staff member reported by the user (not yet in the FOH Staff Directory
@@ -104,41 +111,55 @@ if (!d.staff.some(s => s.email === 'shamita.bhandari30@gmail.com')) {
 // last uses a disposable email domain). The remaining 8 (Kim's other 0,
 // Jess's other 5, Karishma's other 3) ARE real Eber members with a
 // verified Member Since date and stay counted.
+//
+// Updated with a further export (job_id_120201, transaction IDs 607091-
+// 607437) covering Aug 25 21:21 through Aug 26 21:56. New this round:
+// - Safran Lance Angelo B. (see roster-correction block above) had 2
+//   referrals sitting unattributed until his email was filled in.
+// - A manually-reported untracked referral: Richel Cimafranca
+//   (richuy86@gmail.com) referred davidwongkk@yahoo.com - confirmed absent
+//   from this export (and the prior one) before adding, same as the
+//   existing Untracked-tab entries.
+// - Gandia Leomar and Tshemgi Sherpa are newly active this round (were 0).
 const updates = {
-  'shamita.bhandari30@gmail.com': { referrals: 5, vouchers: 4 },
-  'jesycabatbat@gmail.com': { referrals: 7, vouchers: 1 },
-  'kimberlymatan80@gmail.com': { referrals: 10, vouchers: 1 },
+  'shamita.bhandari30@gmail.com': { referrals: 7, vouchers: 6 },
+  'jesycabatbat@gmail.com': { referrals: 8, vouchers: 2 },
+  'kimberlymatan80@gmail.com': { referrals: 11, vouchers: 2 },
   'karishmarai833@gmail.com': { referrals: 3, vouchers: 0 },
   'omonuwabest00@gmail.com': { referrals: 8, vouchers: 2 },
   'nymphrai01@gmail.com': { referrals: 1, vouchers: 0 },
-  'roqueaia415@gmail.com': { referrals: 47, vouchers: 32 },
-  'rajusubedimala@gmail.com': { referrals: 61, vouchers: 39 },
+  'roqueaia415@gmail.com': { referrals: 51, vouchers: 35 },
+  'rajusubedimala@gmail.com': { referrals: 71, vouchers: 49 },
   'kangmang456@icloud.com': { referrals: 17, vouchers: 12 },
-  'chadanigauchan@gmail.com': { referrals: 5, vouchers: 4 },
-  'limbu.neeyara123@gmail.com': { referrals: 15, vouchers: 4 },
-  'punmarina99852@gmail.com': { referrals: 17, vouchers: 12 },
+  'chadanigauchan@gmail.com': { referrals: 6, vouchers: 5 },
+  'limbu.neeyara123@gmail.com': { referrals: 18, vouchers: 7 },
+  'punmarina99852@gmail.com': { referrals: 18, vouchers: 13 },
   'benedictbuendia3@gmail.com': { referrals: 45, vouchers: 19 },
   'samual.salvator61@gmail.com': { referrals: 10, vouchers: 3 },
-  'brivajustin@gmail.com': { referrals: 78, vouchers: 28 },
+  'brivajustin@gmail.com': { referrals: 86, vouchers: 36 },
   'dewansujasna22@gmail.com': { referrals: 2, vouchers: 1 },
   'sharmaanita2746@gmail.com': { referrals: 8, vouchers: 2 },
   'grgkamal777@gmail.com': { referrals: 17, vouchers: 10 },
   'christianjpadua@gmail.com': { referrals: 1, vouchers: 1 },
   'nozomitsuchiya092218@gmail.com': { referrals: 1, vouchers: 0 },
-  'wimonwankitiyayam@gmail.com': { referrals: 12, vouchers: 4 },
-  'lenykc@gmail.com': { referrals: 6, vouchers: 4 },
-  'kellisip08@gmail.com': { referrals: 14, vouchers: 1 },
+  'wimonwankitiyayam@gmail.com': { referrals: 15, vouchers: 7 },
+  'lenykc@gmail.com': { referrals: 12, vouchers: 10 },
+  'kellisip08@gmail.com': { referrals: 16, vouchers: 3 },
   'bhabeangeles@gmail.com': { referrals: 16, vouchers: 0 },
-  'shiela.may.calbario@gmail.com': { referrals: 17, vouchers: 2 },
-  'raii.aditi01@gmail.com': { referrals: 3, vouchers: 2 },
-  'bernadete.francia@gmail.com': { referrals: 9, vouchers: 5 },
-  'mimosa.summerholics@gmail.com': { referrals: 14, vouchers: 2 },
-  'veegabion@gmail.com': { referrals: 3, vouchers: 3 },
+  'shiela.may.calbario@gmail.com': { referrals: 19, vouchers: 4 },
+  'raii.aditi01@gmail.com': { referrals: 6, vouchers: 5 },
+  'bernadete.francia@gmail.com': { referrals: 13, vouchers: 9 },
+  'mimosa.summerholics@gmail.com': { referrals: 18, vouchers: 3 },
+  'veegabion@gmail.com': { referrals: 7, vouchers: 7 },
   'nurainibassam34@gmail.com': { referrals: 15, vouchers: 2 },
   'princessjaireen17michelle@gmail.com': { referrals: 10, vouchers: 3 },
   'melndm@yahoo.com': { referrals: 1, vouchers: 0 },
   'harronbumagat1@gmail.com': { referrals: 3, vouchers: 2 },
-  'rob.doctura@gmail.com': { referrals: 1, vouchers: 0 },
+  'rob.doctura@gmail.com': { referrals: 2, vouchers: 1 },
+  'leomargandia0413@gmail.com': { referrals: 5, vouchers: 5 },
+  'chhemgis@gmail.com': { referrals: 4, vouchers: 4 },
+  'richuy86@gmail.com': { referrals: 4, vouchers: 3 },
+  'lanceangelo2001@gmail.com': { referrals: 2, vouchers: 1 },
 };
 
 const monthKey = '2026-08';
