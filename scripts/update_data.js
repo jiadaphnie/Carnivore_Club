@@ -176,6 +176,15 @@ if (!d.staff.some(s => s.email === 'shamita.bhandari30@gmail.com')) {
 // (FIS - TST), Ahmed Hassan (FIB -TST HC), and Kateline Gordo De Dios
 // (FIS - Causeway Bay) - the last one is a clean name/email match against
 // the existing roster row, no correction needed.
+//
+// Added 2 more untracked referrals for Hernandez Patrici (payhshwjn@gmail.com,
+// FIS - QB): chouroselyncy@gmail.com and joannelau21@gmail.com. Found sitting
+// in the Untracked tab (rows 17-18) with no record of when they were added;
+// checked against all 9 Eber CSV exports on file and neither email appears
+// in any of them, so not a double-count. User confirmed both are already
+// verified (real Eber members) - counted as referrals, no vouchers (same
+// treatment as the tab's other untracked entries, which have no Eber
+// reward data to draw from).
 const updates = {
   'shamita.bhandari30@gmail.com': { referrals: 9, vouchers: 6 },
   'jesycabatbat@gmail.com': { referrals: 9, vouchers: 3 },
@@ -217,7 +226,7 @@ const updates = {
   'lanceangelo2001@gmail.com': { referrals: 2, vouchers: 1 },
   'alvinbambang285@yahoo.com': { referrals: 4, vouchers: 4 },
   'mutibahaider@gmail.com': { referrals: 15, vouchers: 13 },
-  'payhshwjn@gmail.com': { referrals: 4, vouchers: 2 },
+  'payhshwjn@gmail.com': { referrals: 6, vouchers: 2 },
   'megandoria03@gmail.com': { referrals: 4, vouchers: 4 },
   'sabitasapkota2016@gmail.com': { referrals: 6, vouchers: 5 },
   'sonamsrai23@gmail.com': { referrals: 3, vouchers: 3 },

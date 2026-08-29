@@ -877,14 +877,14 @@
       "email": "payhshwjn@gmail.com",
       "is_manager": false,
       "display_name": "Pat",
-      "referrals": 4,
-      "bonus": 40,
+      "referrals": 6,
+      "bonus": 60,
       "vouchers": 2,
       "by_month": {
-        "2026-08": 4
+        "2026-08": 6
       },
-      "referrals_this_month": 4,
-      "bonus_this_month": 40
+      "referrals_this_month": 6,
+      "bonus_this_month": 60
     },
     {
       "branch": "FIS -QB",
@@ -1176,8 +1176,8 @@
     },
     "FIS -QB": {
       "total_staff": 9,
-      "referrals": 20,
-      "bonus": 200,
+      "referrals": 22,
+      "bonus": 220,
       "active_referrers": 4
     },
     "TLF & FIS- Macau": {
@@ -1195,8 +1195,8 @@
   },
   "monthly": {
     "2026-08": {
-      "referrals": 722,
-      "bonus": 7220,
+      "referrals": 724,
+      "bonus": 7240,
       "active_referrers": 46
     }
   },
