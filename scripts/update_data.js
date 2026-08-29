@@ -147,6 +147,35 @@ if (!d.staff.some(s => s.email === 'shamita.bhandari30@gmail.com')) {
 //   voucher reward on the export (blank REFERRAL REWARDS field, unlike
 //   every other counted row this round) - counted as referrals but 0
 //   vouchers added for those two specifically.
+//
+// Updated with a further export (job_id_120314, IDs up to 608368) covering
+// 2026-08-28 12:23:08 through 2026-08-29 12:41:09. This export overlapped
+// the previous one - it re-included IDs 607828 and 607820 (Patricia
+// Hernandez's two referrals, already counted last round) - so those 2
+// rows were excluded from this delta to avoid double-counting; only the
+// 100 rows with ID > 607828 were treated as new. Of those, 3 were non-staff
+// "customer" accounts (Januario Salao x2, and a new one - Niharika Baweja,
+// baweja.niharika@gmail.com, not on the FOH roster; she was herself
+// referred by Ahmed Hassan in this same export, then referred someone on
+// her own, same customer-referring-a-customer pattern as Angel
+// Garcia/Sikum Limbu). 97 rows counted toward staff.
+//
+// A large share of this export's rows (roughly the second half, oldest of
+// the new rows) have a blank REFERRAL REWARDS field even though the
+// REFEREE REWARDS field is filled - i.e. the referee's $50 voucher shows
+// as issued but the staff referrer's own voucher does not yet. Read
+// literally from the export rather than assumed: counted as referrals
+// per usual, but vouchers only incremented where REFERRAL REWARDS was
+// actually non-empty. This affected Raju (+8 referrals/+3 vouchers),
+// Justin (+15/+8), Kamal (+8/+3), Anita (+5/+1), Ramos (+4/+1), Hernandez
+// Patrici (+2/+0), Shiela (+1/+0), Kateline De Dios (+1/+0), and Tanny
+// (+1/+0) specifically.
+//
+// Five staff are newly active this round (were 0): Doria, Joan Megan
+// Lariosa ("Meg'z D"), Sharma Sabita (Picanhas), Signh Rai, Sonam
+// (FIS - TST), Ahmed Hassan (FIB -TST HC), and Kateline Gordo De Dios
+// (FIS - Causeway Bay) - the last one is a clean name/email match against
+// the existing roster row, no correction needed.
 const updates = {
   'shamita.bhandari30@gmail.com': { referrals: 9, vouchers: 6 },
   'jesycabatbat@gmail.com': { referrals: 9, vouchers: 3 },
@@ -155,40 +184,45 @@ const updates = {
   'omonuwabest00@gmail.com': { referrals: 8, vouchers: 2 },
   'nymphrai01@gmail.com': { referrals: 1, vouchers: 0 },
   'roqueaia415@gmail.com': { referrals: 51, vouchers: 35 },
-  'rajusubedimala@gmail.com': { referrals: 85, vouchers: 63 },
+  'rajusubedimala@gmail.com': { referrals: 93, vouchers: 66 },
   'kangmang456@icloud.com': { referrals: 17, vouchers: 12 },
-  'chadanigauchan@gmail.com': { referrals: 6, vouchers: 5 },
-  'limbu.neeyara123@gmail.com': { referrals: 18, vouchers: 7 },
-  'punmarina99852@gmail.com': { referrals: 19, vouchers: 14 },
+  'chadanigauchan@gmail.com': { referrals: 8, vouchers: 7 },
+  'limbu.neeyara123@gmail.com': { referrals: 22, vouchers: 10 },
+  'punmarina99852@gmail.com': { referrals: 23, vouchers: 18 },
   'benedictbuendia3@gmail.com': { referrals: 46, vouchers: 20 },
   'samual.salvator61@gmail.com': { referrals: 10, vouchers: 3 },
-  'brivajustin@gmail.com': { referrals: 95, vouchers: 45 },
-  'dewansujasna22@gmail.com': { referrals: 4, vouchers: 3 },
-  'sharmaanita2746@gmail.com': { referrals: 9, vouchers: 3 },
-  'grgkamal777@gmail.com': { referrals: 21, vouchers: 14 },
+  'brivajustin@gmail.com': { referrals: 110, vouchers: 53 },
+  'dewansujasna22@gmail.com': { referrals: 7, vouchers: 5 },
+  'sharmaanita2746@gmail.com': { referrals: 14, vouchers: 4 },
+  'grgkamal777@gmail.com': { referrals: 29, vouchers: 17 },
   'christianjpadua@gmail.com': { referrals: 1, vouchers: 1 },
-  'nozomitsuchiya092218@gmail.com': { referrals: 4, vouchers: 3 },
-  'wimonwankitiyayam@gmail.com': { referrals: 16, vouchers: 8 },
+  'nozomitsuchiya092218@gmail.com': { referrals: 8, vouchers: 4 },
+  'wimonwankitiyayam@gmail.com': { referrals: 17, vouchers: 8 },
   'lenykc@gmail.com': { referrals: 13, vouchers: 11 },
   'kellisip08@gmail.com': { referrals: 16, vouchers: 3 },
   'bhabeangeles@gmail.com': { referrals: 16, vouchers: 0 },
-  'shiela.may.calbario@gmail.com': { referrals: 19, vouchers: 4 },
-  'raii.aditi01@gmail.com': { referrals: 7, vouchers: 6 },
+  'shiela.may.calbario@gmail.com': { referrals: 20, vouchers: 4 },
+  'raii.aditi01@gmail.com': { referrals: 8, vouchers: 7 },
   'bernadete.francia@gmail.com': { referrals: 15, vouchers: 11 },
-  'mimosa.summerholics@gmail.com': { referrals: 19, vouchers: 4 },
-  'veegabion@gmail.com': { referrals: 12, vouchers: 12 },
-  'nurainibassam34@gmail.com': { referrals: 15, vouchers: 2 },
+  'mimosa.summerholics@gmail.com': { referrals: 20, vouchers: 5 },
+  'veegabion@gmail.com': { referrals: 13, vouchers: 13 },
+  'nurainibassam34@gmail.com': { referrals: 21, vouchers: 4 },
   'princessjaireen17michelle@gmail.com': { referrals: 10, vouchers: 3 },
   'melndm@yahoo.com': { referrals: 1, vouchers: 0 },
   'harronbumagat1@gmail.com': { referrals: 3, vouchers: 2 },
   'rob.doctura@gmail.com': { referrals: 2, vouchers: 1 },
-  'leomargandia0413@gmail.com': { referrals: 14, vouchers: 14 },
+  'leomargandia0413@gmail.com': { referrals: 15, vouchers: 15 },
   'chhemgis@gmail.com': { referrals: 4, vouchers: 4 },
   'richuy86@gmail.com': { referrals: 4, vouchers: 3 },
   'lanceangelo2001@gmail.com': { referrals: 2, vouchers: 1 },
-  'alvinbambang285@yahoo.com': { referrals: 1, vouchers: 1 },
-  'mutibahaider@gmail.com': { referrals: 6, vouchers: 6 },
-  'payhshwjn@gmail.com': { referrals: 2, vouchers: 2 },
+  'alvinbambang285@yahoo.com': { referrals: 4, vouchers: 4 },
+  'mutibahaider@gmail.com': { referrals: 15, vouchers: 13 },
+  'payhshwjn@gmail.com': { referrals: 4, vouchers: 2 },
+  'megandoria03@gmail.com': { referrals: 4, vouchers: 4 },
+  'sabitasapkota2016@gmail.com': { referrals: 6, vouchers: 5 },
+  'sonamsrai23@gmail.com': { referrals: 3, vouchers: 3 },
+  'hassanbroo21@gmail.com': { referrals: 4, vouchers: 4 },
+  'katededios3@gmail.com': { referrals: 1, vouchers: 0 },
 };
 
 const monthKey = '2026-08';
