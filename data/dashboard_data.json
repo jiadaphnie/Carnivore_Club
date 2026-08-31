@@ -306,14 +306,14 @@
       "email": "limbu.neeyara123@gmail.com",
       "is_manager": false,
       "display_name": "Nee",
-      "referrals": 24,
-      "bonus": 240,
-      "vouchers": 12,
+      "referrals": 27,
+      "bonus": 270,
+      "vouchers": 15,
       "by_month": {
-        "2026-08": 24
+        "2026-08": 27
       },
-      "referrals_this_month": 24,
-      "bonus_this_month": 240
+      "referrals_this_month": 27,
+      "bonus_this_month": 270
     },
     {
       "branch": "Punjab Warriors",
@@ -1138,8 +1138,8 @@
     },
     "Punjab Warriors": {
       "total_staff": 6,
-      "referrals": 66,
-      "bonus": 660,
+      "referrals": 69,
+      "bonus": 690,
       "active_referrers": 4
     },
     "FIS - Soho": {
@@ -1199,8 +1199,8 @@
   },
   "monthly": {
     "2026-08": {
-      "referrals": 829,
-      "bonus": 8290,
+      "referrals": 832,
+      "bonus": 8320,
       "active_referrers": 48
     }
   },

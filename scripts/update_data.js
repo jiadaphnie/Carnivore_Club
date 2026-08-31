@@ -204,6 +204,14 @@ if (!d.staff.some(s => s.email === 'shamita.bhandari30@gmail.com')) {
 // Timothy Drilon, elitimothyd@yahoo.com, not on the FOH roster). 39 rows
 // counted toward staff, all with vouchers issued. No newly-active staff
 // this round - all 15 matched staff already had referrals.
+//
+// Updated with a further export (job_id_120379, IDs up to 609795) covering
+// 2026-08-31 13:09:58 through 2026-08-31 13:52:36. No overlap this time -
+// all 4 rows had ID > 609573. 1 was a non-staff "customer" account - Mj
+// Mina, mjlynn.mina@gmail.com, code MJMO, not on the FOH roster (she was
+// herself referred by Januario Salao in the previous export, same
+// customer-referring-a-customer pattern). 3 rows counted, all for Limbu
+// Neeyara (Punjab Warriors), all with vouchers issued.
 const updates = {
   'shamita.bhandari30@gmail.com': { referrals: 9, vouchers: 6 },
   'jesycabatbat@gmail.com': { referrals: 9, vouchers: 3 },
@@ -215,7 +223,7 @@ const updates = {
   'rajusubedimala@gmail.com': { referrals: 108, vouchers: 81 },
   'kangmang456@icloud.com': { referrals: 18, vouchers: 13 },
   'chadanigauchan@gmail.com': { referrals: 11, vouchers: 10 },
-  'limbu.neeyara123@gmail.com': { referrals: 24, vouchers: 12 },
+  'limbu.neeyara123@gmail.com': { referrals: 27, vouchers: 15 },
   'punmarina99852@gmail.com': { referrals: 24, vouchers: 19 },
   'benedictbuendia3@gmail.com': { referrals: 48, vouchers: 22 },
   'samual.salvator61@gmail.com': { referrals: 10, vouchers: 3 },
