@@ -74,14 +74,14 @@
       "email": "omonuwabest00@gmail.com",
       "is_manager": false,
       "display_name": "Best",
-      "referrals": 8,
-      "bonus": 80,
-      "vouchers": 2,
+      "referrals": 12,
+      "bonus": 120,
+      "vouchers": 6,
       "by_month": {
-        "2026-08": 8
+        "2026-08": 12
       },
-      "referrals_this_month": 8,
-      "bonus_this_month": 80
+      "referrals_this_month": 12,
+      "bonus_this_month": 120
     },
     {
       "branch": "TLF",
@@ -157,14 +157,14 @@
       "email": "katededios3@gmail.com",
       "is_manager": false,
       "display_name": "Kate",
-      "referrals": 3,
-      "bonus": 30,
-      "vouchers": 2,
+      "referrals": 5,
+      "bonus": 50,
+      "vouchers": 4,
       "by_month": {
-        "2026-08": 3
+        "2026-08": 5
       },
-      "referrals_this_month": 3,
-      "bonus_this_month": 30
+      "referrals_this_month": 5,
+      "bonus_this_month": 50
     },
     {
       "branch": "FIS - IFC",
@@ -206,14 +206,14 @@
       "email": "roqueaia415@gmail.com",
       "is_manager": false,
       "display_name": "Aia",
-      "referrals": 51,
-      "bonus": 510,
-      "vouchers": 35,
+      "referrals": 52,
+      "bonus": 520,
+      "vouchers": 36,
       "by_month": {
-        "2026-08": 51
+        "2026-08": 52
       },
-      "referrals_this_month": 51,
-      "bonus_this_month": 510
+      "referrals_this_month": 52,
+      "bonus_this_month": 520
     },
     {
       "branch": "FIS - IFC",
@@ -223,14 +223,14 @@
       "email": "rajusubedimala@gmail.com",
       "is_manager": false,
       "display_name": "Raju",
-      "referrals": 105,
-      "bonus": 1050,
-      "vouchers": 78,
+      "referrals": 108,
+      "bonus": 1080,
+      "vouchers": 81,
       "by_month": {
-        "2026-08": 105
+        "2026-08": 108
       },
-      "referrals_this_month": 105,
-      "bonus_this_month": 1050
+      "referrals_this_month": 108,
+      "bonus_this_month": 1080
     },
     {
       "branch": "FIS - IFC",
@@ -240,14 +240,14 @@
       "email": "kangmang456@icloud.com",
       "is_manager": false,
       "display_name": "Sangita",
-      "referrals": 17,
-      "bonus": 170,
-      "vouchers": 12,
+      "referrals": 18,
+      "bonus": 180,
+      "vouchers": 13,
       "by_month": {
-        "2026-08": 17
+        "2026-08": 18
       },
-      "referrals_this_month": 17,
-      "bonus_this_month": 170
+      "referrals_this_month": 18,
+      "bonus_this_month": 180
     },
     {
       "branch": "Punjab Warriors",
@@ -257,14 +257,14 @@
       "email": "alvinbambang285@yahoo.com",
       "is_manager": false,
       "display_name": "Alvin",
-      "referrals": 6,
-      "bonus": 60,
-      "vouchers": 6,
+      "referrals": 7,
+      "bonus": 70,
+      "vouchers": 7,
       "by_month": {
-        "2026-08": 6
+        "2026-08": 7
       },
-      "referrals_this_month": 6,
-      "bonus_this_month": 60
+      "referrals_this_month": 7,
+      "bonus_this_month": 70
     },
     {
       "branch": "Punjab Warriors",
@@ -355,14 +355,14 @@
       "email": "benedictbuendia3@gmail.com",
       "is_manager": false,
       "display_name": "Benedict",
-      "referrals": 46,
-      "bonus": 460,
-      "vouchers": 20,
+      "referrals": 48,
+      "bonus": 480,
+      "vouchers": 22,
       "by_month": {
-        "2026-08": 46
+        "2026-08": 48
       },
-      "referrals_this_month": 46,
-      "bonus_this_month": 460
+      "referrals_this_month": 48,
+      "bonus_this_month": 480
     },
     {
       "branch": "FIS - Soho",
@@ -389,14 +389,14 @@
       "email": "brivajustin@gmail.com",
       "is_manager": false,
       "display_name": "Justin",
-      "referrals": 118,
-      "bonus": 1180,
-      "vouchers": 61,
+      "referrals": 129,
+      "bonus": 1290,
+      "vouchers": 72,
       "by_month": {
-        "2026-08": 118
+        "2026-08": 129
       },
-      "referrals_this_month": 118,
-      "bonus_this_month": 1180
+      "referrals_this_month": 129,
+      "bonus_this_month": 1290
     },
     {
       "branch": "FIS - Soho",
@@ -519,14 +519,14 @@
       "email": "megandoria03@gmail.com",
       "is_manager": false,
       "display_name": "Megan",
-      "referrals": 7,
-      "bonus": 70,
-      "vouchers": 7,
+      "referrals": 11,
+      "bonus": 110,
+      "vouchers": 11,
       "by_month": {
-        "2026-08": 7
+        "2026-08": 11
       },
-      "referrals_this_month": 7,
-      "bonus_this_month": 70
+      "referrals_this_month": 11,
+      "bonus_this_month": 110
     },
     {
       "branch": "FIS - Sheung Wan",
@@ -536,14 +536,14 @@
       "email": "sharmaanita2746@gmail.com",
       "is_manager": false,
       "display_name": "Anita",
-      "referrals": 14,
-      "bonus": 140,
-      "vouchers": 4,
+      "referrals": 15,
+      "bonus": 150,
+      "vouchers": 5,
       "by_month": {
-        "2026-08": 14
+        "2026-08": 15
       },
-      "referrals_this_month": 14,
-      "bonus_this_month": 140
+      "referrals_this_month": 15,
+      "bonus_this_month": 150
     },
     {
       "branch": "FIS - Sheung Wan",
@@ -553,14 +553,14 @@
       "email": "grgkamal777@gmail.com",
       "is_manager": false,
       "display_name": "Kumal",
-      "referrals": 29,
-      "bonus": 290,
-      "vouchers": 17,
+      "referrals": 31,
+      "bonus": 310,
+      "vouchers": 19,
       "by_month": {
-        "2026-08": 29
+        "2026-08": 31
       },
-      "referrals_this_month": 29,
-      "bonus_this_month": 290
+      "referrals_this_month": 31,
+      "bonus_this_month": 310
     },
     {
       "branch": "FIS - Sheung Wan",
@@ -819,14 +819,14 @@
       "email": "raii.aditi01@gmail.com",
       "is_manager": false,
       "display_name": "Aditi",
-      "referrals": 9,
-      "bonus": 90,
-      "vouchers": 8,
+      "referrals": 10,
+      "bonus": 100,
+      "vouchers": 9,
       "by_month": {
-        "2026-08": 9
+        "2026-08": 10
       },
-      "referrals_this_month": 9,
-      "bonus_this_month": 90
+      "referrals_this_month": 10,
+      "bonus_this_month": 100
     },
     {
       "branch": "FIS -QB",
@@ -962,14 +962,14 @@
       "email": "veegabion@gmail.com",
       "is_manager": false,
       "display_name": "Vee",
-      "referrals": 16,
-      "bonus": 160,
-      "vouchers": 16,
+      "referrals": 17,
+      "bonus": 170,
+      "vouchers": 17,
       "by_month": {
-        "2026-08": 16
+        "2026-08": 17
       },
-      "referrals_this_month": 16,
-      "bonus_this_month": 160
+      "referrals_this_month": 17,
+      "bonus_this_month": 170
     },
     {
       "branch": "TLF & FIS- Macau",
@@ -994,14 +994,14 @@
       "email": "nurainibassam34@gmail.com",
       "is_manager": false,
       "display_name": "Nora",
-      "referrals": 27,
-      "bonus": 270,
-      "vouchers": 10,
+      "referrals": 31,
+      "bonus": 310,
+      "vouchers": 14,
       "by_month": {
-        "2026-08": 27
+        "2026-08": 31
       },
-      "referrals_this_month": 27,
-      "bonus_this_month": 270
+      "referrals_this_month": 31,
+      "bonus_this_month": 310
     },
     {
       "branch": "TLF & FIS- Macau",
@@ -1011,14 +1011,14 @@
       "email": "princessjaireen17michelle@gmail.com",
       "is_manager": false,
       "display_name": "Jai",
-      "referrals": 10,
-      "bonus": 100,
-      "vouchers": 3,
+      "referrals": 11,
+      "bonus": 110,
+      "vouchers": 4,
       "by_month": {
-        "2026-08": 10
+        "2026-08": 11
       },
-      "referrals_this_month": 10,
-      "bonus_this_month": 100
+      "referrals_this_month": 11,
+      "bonus_this_month": 110
     },
     {
       "branch": "TLF & FIS- Macau",
@@ -1120,44 +1120,44 @@
   "branch_summary_current": {
     "TLF": {
       "total_staff": 6,
-      "referrals": 47,
-      "bonus": 470,
+      "referrals": 51,
+      "bonus": 510,
       "active_referrers": 5
     },
     "FIS - Causeway Bay": {
       "total_staff": 4,
-      "referrals": 8,
-      "bonus": 80,
+      "referrals": 10,
+      "bonus": 100,
       "active_referrers": 3
     },
     "FIS - IFC": {
       "total_staff": 5,
-      "referrals": 174,
-      "bonus": 1740,
+      "referrals": 179,
+      "bonus": 1790,
       "active_referrers": 4
     },
     "Punjab Warriors": {
       "total_staff": 6,
-      "referrals": 65,
-      "bonus": 650,
+      "referrals": 66,
+      "bonus": 660,
       "active_referrers": 4
     },
     "FIS - Soho": {
       "total_staff": 6,
-      "referrals": 183,
-      "bonus": 1830,
+      "referrals": 196,
+      "bonus": 1960,
       "active_referrers": 4
     },
     "FIS - TST": {
       "total_staff": 6,
-      "referrals": 40,
-      "bonus": 400,
+      "referrals": 44,
+      "bonus": 440,
       "active_referrers": 5
     },
     "FIS - Sheung Wan": {
       "total_staff": 5,
-      "referrals": 52,
-      "bonus": 520,
+      "referrals": 55,
+      "bonus": 550,
       "active_referrers": 4
     },
     "FIS - Wan Chai": {
@@ -1180,14 +1180,14 @@
     },
     "FIS -QB": {
       "total_staff": 9,
-      "referrals": 23,
-      "bonus": 230,
+      "referrals": 24,
+      "bonus": 240,
       "active_referrers": 4
     },
     "TLF & FIS- Macau": {
       "total_staff": 9,
-      "referrals": 89,
-      "bonus": 890,
+      "referrals": 95,
+      "bonus": 950,
       "active_referrers": 6
     },
     "Picanhas": {
@@ -1199,8 +1199,8 @@
   },
   "monthly": {
     "2026-08": {
-      "referrals": 790,
-      "bonus": 7900,
+      "referrals": 829,
+      "bonus": 8290,
       "active_referrers": 48
     }
   },
@@ -1225,5 +1225,5 @@
     "FIS -QB": 465
   },
   "bonus_per_referral": 10,
-  "last_updated": "30 Aug 2026"
+  "last_updated": "31 Aug 2026"
 }
