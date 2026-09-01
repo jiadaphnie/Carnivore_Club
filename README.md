@@ -11,10 +11,33 @@ A monthly, branch-by-branch referral leaderboard for Carnivore Club FOH staff, b
 
 Managers (Manager, Assistant Manager, Restaurant Manager, Floor Manager, and the AM/RM/BM role codes) are excluded from the competition.
 
-## Refreshing the data
-This is currently a static snapshot, refreshed manually: re-pull the Referral Transactions report (Eber XM → Insights → Referral → Referral Transactions, All Time), update the transaction list and staff export, regenerate `data/dashboard_data.json`, and rebuild `index.html`.
+## Live updates
+The deployed dashboard loads its live data from `/api/dashboard`. Eber sends a `user_create` webhook whenever a member is created. The webhook handler fetches that member from Eber's API, reads `referral_user_id`, resolves the staff referrer, and records one referral in Neon Postgres.
 
-**In progress:** an unattended Python/Playwright script to automate this pull on a schedule, since Eber XM has no API or webhooks. See `EBER_LIVE_DASHBOARD_PROGRESS.md` in the parent `Carnivore_Club` folder for the current plan, decisions made, and next steps.
+The current `data/dashboard_data.json` is retained as the source roster/configuration and as the one-time seed for the existing historical totals. New webhook referrals are added to those seeded totals. Staff eligibility, branch, role, and display name come from this versioned roster; Eber staff tiers/tags are checked as a second eligibility signal.
+
+Referrals count immediately in the `Asia/Hong_Kong` month. Cancellation/reversal reconciliation is intentionally out of scope.
+
+### One-time deployment setup
+1. Create a Neon Postgres database and set its pooled connection string as `DATABASE_URL` in Vercel.
+2. In Vercel, add `EBER_API_KEY`, `EBER_WEBHOOK_SECRET`, and `ADMIN_SECRET`. Generate the last two as unique long random values.
+3. Deploy this repository to Vercel.
+4. Create an Eber webhook with topic `user_create`, address `https://referral-dashboard-sable.vercel.app/api/eber-webhook`, and custom header `X-Eber-Webhook-Secret` set to the same value as `EBER_WEBHOOK_SECRET`.
+5. Seed the existing snapshot once by POSTing to `/api/admin/seed` with header `X-Admin-Secret` set to `ADMIN_SECRET`.
+6. Create one controlled Eber referral and verify the live leaderboard increments once.
+
+The API key uses HTTP Basic Auth with the key as the username and an empty password. The incoming webhook uses a shared custom header because the supplied Eber HMAC documentation applies to web-app login URLs, not webhook request signing.
+
+### Local development
+Install Node.js 20 or later, then run:
+
+```bash
+npm install
+cp .env.example .env
+npm run dev
+```
+
+Set real values only in `.env` and Vercel Environment Variables. Do not commit API keys, database URLs, webhook secrets, Eber user-response captures, or staff/customer contact data beyond the minimum roster fields already used by the dashboard.
 
 ## Deploying
-This is a single self-contained `index.html` — no build step. Deploy as a static site on Vercel (or any static host).
+Vercel hosts the page and serverless API endpoints. A static host alone cannot receive Eber webhooks or provide live dashboard data.

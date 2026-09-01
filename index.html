@@ -1250,6 +1250,86 @@ function toggleTheme() {
     root.setAttribute('data-theme', 'dark');
   }
 }
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, character => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[character]);
+}
+
+function replaceMarkedContent(startText, endText, content) {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_COMMENT);
+  let start;
+  let end;
+  while (walker.nextNode()) {
+    if (walker.currentNode.nodeValue.trim() === startText) start = walker.currentNode;
+    if (walker.currentNode.nodeValue.trim() === endText) end = walker.currentNode;
+  }
+  if (!start || !end) return;
+  let node = start.nextSibling;
+  while (node && node !== end) {
+    const next = node.nextSibling;
+    node.remove();
+    node = next;
+  }
+  end.insertAdjacentHTML('beforebegin', content);
+}
+
+function renderDashboard(data) {
+  const month = data.current_month;
+  const monthName = data.month_names[month];
+  const monthStats = data.monthly[month];
+  const branchOrder = Object.keys(data.store_targets);
+  const rankedStaff = data.staff.filter(staff => staff.referrals_this_month > 0)
+    .sort((left, right) => right.referrals_this_month - left.referrals_this_month);
+  const rankedBranches = branchOrder.map(name => ({ name, ...data.branch_summary_current[name] }))
+    .sort((left, right) => right.referrals - left.referrals);
+
+  document.querySelector('.last-updated').textContent = `Last updated ${data.last_updated}`;
+  document.querySelector('.meta-details summary').textContent = `Showing ${monthName} · resets each month`;
+  document.querySelector('.kpi-grid').innerHTML = `
+    <div class="kpi-tile"><div class="kpi-value">${monthStats.referrals}</div><div class="kpi-label">Referrals this month</div></div>
+    <div class="kpi-tile"><div class="kpi-value">HKD ${monthStats.bonus}</div><div class="kpi-label">Total referral bonus</div></div>
+    <div class="kpi-tile"><div class="kpi-value">${monthStats.active_referrers} <span style="font-size:14px;color:var(--text-secondary);font-weight:500;">/ ${data.staff.length}</span></div><div class="kpi-label">Staff on the board</div></div>`;
+
+  document.querySelector('.mvp-list').innerHTML = rankedStaff.slice(0, 3).map((staff, index) => `
+    <div class="mvp-card"><div class="mvp-avatar${index === 1 ? ' silver' : index === 2 ? ' bronze' : ''}">${escapeHtml(staff.display_name[0])}</div>
+      <div class="mvp-info"><div class="mvp-label">#${index + 1} · ${escapeHtml(monthName)}</div><div class="mvp-name">${escapeHtml(staff.display_name)}</div><div class="mvp-meta">${escapeHtml(staff.branch)} · ${escapeHtml(staff.role)}</div></div>
+      <div class="mvp-stats"><div class="mvp-stat"><div class="mvp-stat-value">${staff.referrals_this_month}</div><div class="mvp-stat-label">referrals</div></div><div class="mvp-stat"><div class="mvp-stat-value">HKD ${staff.bonus_this_month}</div><div class="mvp-stat-label">referral bonus</div></div></div></div>`).join('');
+
+  document.querySelector('.branch-list').innerHTML = rankedBranches.map((branch, index) => {
+    const target = data.store_targets[branch.name];
+    const share = target ? (branch.referrals / target * 100).toFixed(1) : '0.0';
+    return `<li class="branch-card"><div class="rank-badge${branch.referrals === 0 ? ' muted-badge' : ''}">${index + 1}</div><div class="branch-main"><div class="branch-name-line"><span class="branch-name">${escapeHtml(branch.name)}</span><span class="branch-sub">${branch.active_referrers} of ${branch.total_staff} staff on the board · target ${target.toLocaleString()}/mo</span></div><div class="track"><div class="fill" style="width:${Math.min(Number(share), 100)}%"></div></div></div><div class="branch-stats"><div class="lb-count">${branch.referrals}</div><div class="lb-count-label">${branch.referrals === 1 ? 'referral' : 'referrals'}</div><div class="lb-value">${branch.referrals ? `HKD ${branch.bonus} bonus` : 'n/a'}</div><div class="target-badge${branch.referrals >= target ? ' met' : ''}">${share}% of target</div></div></li>`;
+  }).join('');
+
+  const monthly = Object.entries(data.monthly).sort(([left], [right]) => left.localeCompare(right));
+  const maximum = Math.max(...monthly.map(([, values]) => values.referrals), 1);
+  document.querySelector('.trend-row').innerHTML = monthly.map(([key, values]) => `<div class="trend-col${key === month ? ' current' : ''}"><div class="trend-bar-track"><div class="trend-bar" style="height:${Math.round(values.referrals / maximum * 100)}%"></div></div><div class="trend-value">${values.referrals}</div><div class="trend-label">${escapeHtml(data.month_names[key])}</div></div>`).join('');
+
+  const roster = rankedBranches.map((branch, index) => {
+    const rows = data.staff.filter(staff => staff.branch === branch.name)
+      .sort((left, right) => right.referrals_this_month - left.referrals_this_month)
+      .map(staff => `<tr class="${staff.referrals_this_month ? '' : 'zero'}"><td class="col-name">${escapeHtml(staff.display_name)} <span class="row-role">${escapeHtml(staff.role)}</span></td><td class="col-num">${staff.referrals_this_month}</td><td class="col-num">${staff.referrals_this_month ? `HKD ${staff.bonus_this_month}` : 'n/a'}</td></tr>`).join('');
+    return `<details class="branch-detail"${index === 0 ? ' open' : ''}><summary><span class="summary-name">${escapeHtml(branch.name)}</span><span class="summary-stats">${branch.referrals} ${branch.referrals === 1 ? 'referral' : 'referrals'} · ${branch.total_staff} staff</span></summary><table class="roster-table"><thead><tr><th>Name</th><th>Referrals</th><th>Referral bonus</th></tr></thead><tbody>${rows}</tbody></table></details>`;
+  }).join('');
+  replaceMarkedContent('ROSTER_START', 'ROSTER_END', roster);
+
+  document.querySelectorAll('h2').forEach(heading => {
+    if (heading.textContent.startsWith('Top 3 referrers')) heading.textContent = `Top 3 referrers · ${monthName}`;
+    if (heading.textContent.startsWith('Branch leaderboard')) heading.textContent = `Branch leaderboard · ${monthName}`;
+    if (heading.textContent.startsWith('Full roster by branch')) heading.textContent = `Full roster by branch · ${monthName}`;
+  });
+}
+
+async function loadDashboard() {
+  const response = await fetch('/api/dashboard');
+  if (!response.ok) throw new Error('Dashboard API unavailable');
+  renderDashboard(await response.json());
+}
+
+loadDashboard().catch(error => console.warn(error.message));
+setInterval(() => loadDashboard().catch(() => {}), 60000);
 </script>
 </body>
 </html>

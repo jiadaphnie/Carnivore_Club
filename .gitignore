@@ -1,5 +1,11 @@
 .DS_Store
 *.png
 
+.env
+.env.*
+!.env.example
+referee.json
+referred-member.json
+
 .vercel
 node_modules
