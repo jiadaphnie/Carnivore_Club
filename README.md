@@ -21,6 +21,17 @@ Referrals count immediately in the `Asia/Hong_Kong` month. Cancellation/reversal
 ### Historical months
 The dashboard opens on the current Hong Kong month. Select a prior month from the dashboard control, or link directly with `?month=YYYY-MM`, for example `/?month=2026-08`.
 
+### One-time September 2026 backfill
+The `POST /api/admin/backfill` route imports members created in September 2026 from Eber and applies the same eligible-staff and duplicate rules as the webhook. It is disabled unless `BACKFILL_ENABLED=true` is set in Vercel.
+
+1. Set `BACKFILL_ENABLED=true` in Vercel Production environment variables and redeploy.
+2. Run the endpoint once with `X-Admin-Secret` set to `ADMIN_SECRET`.
+3. Check the returned `scanned`, `recorded`, `duplicate`, `no_referrer`, `ineligible_referrer`, and `failures` totals. Do not treat a response with failures as complete.
+4. Compare `/api/dashboard?month=2026-09` against Eber's Referral Transactions report.
+5. Set `BACKFILL_ENABLED=false`, redeploy, and remove the endpoint in a later cleanup change.
+
+The import is safe to retry because each Eber referee ID is stored once. It imports only referrals represented by Eber's `referral_user_id`; it does not recreate manually verified referrals absent from Eber.
+
 ### One-time deployment setup
 1. Create a Neon Postgres database and set its pooled connection string as `DATABASE_URL` in Vercel.
 2. In Vercel, add `EBER_API_KEY`, `EBER_WEBHOOK_SECRET`, and `ADMIN_SECRET`. Generate the last two as unique long random values.

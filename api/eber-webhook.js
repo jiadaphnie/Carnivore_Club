@@ -1,18 +1,8 @@
 const { query } = require('../lib/db');
-const { getTierNames, getUser } = require('../lib/eber');
-const { findEligibleStaff, normalizeEmail } = require('../lib/roster');
+const { getUser } = require('../lib/eber');
+const { recordReferral } = require('../lib/referrals');
 const { ensureSchema } = require('../lib/schema');
 const { hasMatchingSecret } = require('../lib/security');
-
-function isStaffAccount(user) {
-  const tiers = getTierNames(user);
-  return (user.tags || []).includes('Steak King Staff')
-    || tiers.some(tier => tier.startsWith('STAFF-'));
-}
-
-function hongKongTimestamp(timestamp) {
-  return `${timestamp.replace(' ', 'T')}+08:00`;
-}
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -41,21 +31,7 @@ module.exports = async (req, res) => {
     }
 
     const referee = await getUser(refereeUserId);
-    let result = 'ignored';
-    if (referee.referral_user_id) {
-      const referrer = await getUser(referee.referral_user_id);
-      const staff = findEligibleStaff(normalizeEmail(referrer.email));
-      if (staff && isStaffAccount(referrer)) {
-        const inserted = await query(
-          `INSERT INTO referrals (referee_user_id, staff_email, occurred_at)
-           VALUES ($1, $2, $3)
-           ON CONFLICT (referee_user_id) DO NOTHING
-           RETURNING referee_user_id`,
-          [refereeUserId, staff.email, hongKongTimestamp(referee.enrolled_at || referee.created_at)],
-        );
-        result = inserted.length ? 'recorded' : 'duplicate';
-      }
-    }
+    const result = await recordReferral(referee);
 
     await query('INSERT INTO webhook_receipts (event_key) VALUES ($1) ON CONFLICT DO NOTHING', [eventKey]);
     res.status(200).json({ ok: true, result });
