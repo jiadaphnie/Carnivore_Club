@@ -5,6 +5,11 @@ const { hasMatchingSecret } = require('../../lib/security');
 
 const SEPTEMBER_2026 = { fromDate: '2026-09-01', toDate: '2026-09-30' };
 
+function enrolledInSeptember(user) {
+  const enrolledAt = user.enrolled_at || user.created_at;
+  return typeof enrolledAt === 'string' && enrolledAt.startsWith('2026-09-');
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -23,9 +28,13 @@ module.exports = async (req, res) => {
   try {
     await ensureSchema();
     const users = await listUsers(SEPTEMBER_2026);
-    const summary = { duplicate: 0, failures: 0, ineligible_referrer: 0, no_referrer: 0, recorded: 0, scanned: users.length };
+    const summary = { duplicate: 0, failures: 0, ineligible_referrer: 0, no_referrer: 0, outside_period: 0, recorded: 0, scanned: users.length };
     for (const user of users) {
       try {
+        if (!enrolledInSeptember(user)) {
+          summary.outside_period += 1;
+          continue;
+        }
         const result = await recordReferral(user);
         summary[result] += 1;
       } catch (error) {
