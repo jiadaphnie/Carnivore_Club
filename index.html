@@ -1247,10 +1247,6 @@
     <!-- ROSTER_END -->
   </section>
 
-  <footer>
-    Built from the Carnivore Club FOH Staff Directory (referral code / email) joined against Eber XM's Referral Transactions report, matched to staff by account email. Referrals from customers who are not staff (and the Carnivore Club team's own account) are excluded. Managers, assistant managers, restaurant managers, and floor managers (including AM / RM / BM role codes) are not included in this leaderboard. "Referral bonus" is HKD 10 per successful referral, credited to the referring staff member, and resets each month. Sign-up targets shown in the branch leaderboard are monthly per-branch goals provided by the team, not derived from Eber.
-  </footer>
-
 </div>
 <script>
 function toggleTheme() {
@@ -1286,7 +1282,9 @@ function replaceMarkedContent(startText, endText, content) {
     node.remove();
     node = next;
   }
-  end.insertAdjacentHTML('beforebegin', content);
+  const range = document.createRange();
+  range.setStartBefore(end);
+  end.parentNode.insertBefore(range.createContextualFragment(content), end);
 }
 
 function renderDashboard(data) {
