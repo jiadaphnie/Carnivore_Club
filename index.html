@@ -92,11 +92,18 @@
     border: 1px solid var(--border);
     background: var(--surface-1);
     color: var(--text-secondary);
-    border-radius: 999px;
-    padding: 6px 14px;
+    border-radius: 8px;
+    padding: 8px 10px;
     font-size: 13px;
     cursor: pointer;
   }
+  .header-controls { display: flex; align-items: end; gap: 8px; }
+  .month-control { display: grid; gap: 4px; }
+  .month-control label { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+  .month-control select { min-width: 148px; height: 34px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-1); color: var(--text-primary); font: inherit; padding: 0 8px; cursor: pointer; }
+  .dashboard-status { color: var(--muted); font-size: 12px; min-height: 18px; margin: -16px 0 18px; }
+  .dashboard-status.error { color: #b42318; }
+  .empty-state { border: 1px dashed var(--border); border-radius: 8px; color: var(--muted); font-size: 13px; padding: 18px; text-align: center; }
   details.meta-details {
     margin-bottom: 28px;
   }
@@ -382,6 +389,9 @@
   @media (max-width: 640px) {
     .wrap { padding: 16px 12px 60px; }
     header.page-head { gap: 10px; }
+    .header-controls { width: 100%; justify-content: space-between; }
+    .month-control { flex: 1; }
+    .month-control select { width: 100%; }
     .title-block h1 { font-size: 21px; }
     .title-block p { font-size: 13px; }
     .kpi-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
@@ -411,12 +421,16 @@
       <p>Carnivore Club FOH · who's bringing in new members, by branch</p>
       <p class="last-updated">Last updated 1 Sept 2026</p>
     </div>
-    <button class="theme-toggle" onclick="toggleTheme()">🌓 Toggle theme</button>
+    <div class="header-controls">
+      <div class="month-control"><label for="month-select">Leaderboard month</label><select id="month-select" disabled></select></div>
+      <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle color theme">🌓</button>
+    </div>
   </header>
   <details class="meta-details">
     <summary>Showing August 2026 · resets each month</summary>
     <div class="meta-full">Source: Eber XM → Insights → Referral → Referral Transactions, matched to staff by account email. Managers (incl. AM / RM / BM) are not included.</div>
   </details>
+  <div class="dashboard-status" aria-live="polite"></div>
 
   <div class="kpi-grid">
     <div class="kpi-tile">
@@ -1276,7 +1290,7 @@ function replaceMarkedContent(startText, endText, content) {
 }
 
 function renderDashboard(data) {
-  const month = data.current_month;
+  const month = data.selected_month;
   const monthName = data.month_names[month];
   const monthStats = data.monthly[month];
   const branchOrder = Object.keys(data.store_targets);
@@ -1287,15 +1301,22 @@ function renderDashboard(data) {
 
   document.querySelector('.last-updated').textContent = `Last updated ${data.last_updated}`;
   document.querySelector('.meta-details summary').textContent = `Showing ${monthName} · resets each month`;
+  const selector = document.querySelector('#month-select');
+  selector.innerHTML = data.available_months.map(key => `<option value="${key}">${escapeHtml(data.month_names[key])}</option>`).join('');
+  selector.value = month;
+  selector.disabled = false;
+  document.querySelector('.dashboard-status').textContent = month === data.current_month && monthStats.referrals === 0
+    ? 'No referrals recorded yet for this month. Historical results remain available above.'
+    : '';
   document.querySelector('.kpi-grid').innerHTML = `
     <div class="kpi-tile"><div class="kpi-value">${monthStats.referrals}</div><div class="kpi-label">Referrals this month</div></div>
     <div class="kpi-tile"><div class="kpi-value">HKD ${monthStats.bonus}</div><div class="kpi-label">Total referral bonus</div></div>
     <div class="kpi-tile"><div class="kpi-value">${monthStats.active_referrers} <span style="font-size:14px;color:var(--text-secondary);font-weight:500;">/ ${data.staff.length}</span></div><div class="kpi-label">Staff on the board</div></div>`;
 
-  document.querySelector('.mvp-list').innerHTML = rankedStaff.slice(0, 3).map((staff, index) => `
+  document.querySelector('.mvp-list').innerHTML = rankedStaff.length ? rankedStaff.slice(0, 3).map((staff, index) => `
     <div class="mvp-card"><div class="mvp-avatar${index === 1 ? ' silver' : index === 2 ? ' bronze' : ''}">${escapeHtml(staff.display_name[0])}</div>
       <div class="mvp-info"><div class="mvp-label">#${index + 1} · ${escapeHtml(monthName)}</div><div class="mvp-name">${escapeHtml(staff.display_name)}</div><div class="mvp-meta">${escapeHtml(staff.branch)} · ${escapeHtml(staff.role)}</div></div>
-      <div class="mvp-stats"><div class="mvp-stat"><div class="mvp-stat-value">${staff.referrals_this_month}</div><div class="mvp-stat-label">referrals</div></div><div class="mvp-stat"><div class="mvp-stat-value">HKD ${staff.bonus_this_month}</div><div class="mvp-stat-label">referral bonus</div></div></div></div>`).join('');
+      <div class="mvp-stats"><div class="mvp-stat"><div class="mvp-stat-value">${staff.referrals_this_month}</div><div class="mvp-stat-label">referrals</div></div><div class="mvp-stat"><div class="mvp-stat-value">HKD ${staff.bonus_this_month}</div><div class="mvp-stat-label">referral bonus</div></div></div></div>`).join('') : '<div class="empty-state">No staff referrals have been recorded for this month yet.</div>';
 
   document.querySelector('.branch-list').innerHTML = rankedBranches.map((branch, index) => {
     const target = data.store_targets[branch.name];
@@ -1323,13 +1344,37 @@ function renderDashboard(data) {
 }
 
 async function loadDashboard() {
-  const response = await fetch('/api/dashboard');
+  const selector = document.querySelector('#month-select');
+  const requestedMonth = new URLSearchParams(window.location.search).get('month');
+  selector.disabled = true;
+  document.querySelector('.dashboard-status').textContent = 'Loading leaderboard...';
+  const response = await fetch(`/api/dashboard${requestedMonth ? `?month=${encodeURIComponent(requestedMonth)}` : ''}`);
   if (!response.ok) throw new Error('Dashboard API unavailable');
-  renderDashboard(await response.json());
+  const data = await response.json();
+  renderDashboard(data);
+  const url = new URL(window.location);
+  if (data.selected_month === data.current_month) url.searchParams.delete('month');
+  else url.searchParams.set('month', data.selected_month);
+  window.history.replaceState({}, '', url);
 }
 
-loadDashboard().catch(error => console.warn(error.message));
-setInterval(() => loadDashboard().catch(() => {}), 60000);
+document.querySelector('#month-select').addEventListener('change', event => {
+  const url = new URL(window.location);
+  url.searchParams.set('month', event.target.value);
+  window.history.replaceState({}, '', url);
+  loadDashboard().catch(error => {
+    document.querySelector('.dashboard-status').textContent = error.message;
+    document.querySelector('.dashboard-status').classList.add('error');
+  });
+});
+
+loadDashboard().catch(error => {
+  document.querySelector('.dashboard-status').textContent = error.message;
+  document.querySelector('.dashboard-status').classList.add('error');
+});
+setInterval(() => {
+  if (!new URLSearchParams(window.location.search).has('month')) loadDashboard().catch(() => {});
+}, 60000);
 </script>
 </body>
 </html>

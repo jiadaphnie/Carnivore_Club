@@ -18,6 +18,9 @@ The current `data/dashboard_data.json` is retained as the source roster/configur
 
 Referrals count immediately in the `Asia/Hong_Kong` month. Cancellation/reversal reconciliation is intentionally out of scope.
 
+### Historical months
+The dashboard opens on the current Hong Kong month. Select a prior month from the dashboard control, or link directly with `?month=YYYY-MM`, for example `/?month=2026-08`.
+
 ### One-time deployment setup
 1. Create a Neon Postgres database and set its pooled connection string as `DATABASE_URL` in Vercel.
 2. In Vercel, add `EBER_API_KEY`, `EBER_WEBHOOK_SECRET`, and `ADMIN_SECRET`. Generate the last two as unique long random values.

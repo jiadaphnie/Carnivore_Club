@@ -10,11 +10,11 @@ module.exports = async (req, res) => {
 
   try {
     await ensureSchema();
-    const dashboard = await getDashboard();
+    const dashboard = await getDashboard(req.query.month);
     res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
     res.status(200).json(dashboard);
   } catch (error) {
     console.error('Dashboard error:', error.message);
-    res.status(500).json({ error: 'Dashboard is temporarily unavailable' });
+    res.status(error.statusCode || 500).json({ error: error.statusCode ? error.message : 'Dashboard is temporarily unavailable' });
   }
 };
