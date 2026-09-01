@@ -6,6 +6,7 @@
 !.env.example
 referee.json
 referred-member.json
+eber-page.json
 
 .vercel
 node_modules
