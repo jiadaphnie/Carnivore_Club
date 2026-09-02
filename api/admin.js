@@ -1,10 +1,10 @@
-const { audit, bootstrapAdmin, clearSessionCookie, hashPassword, hashToken, normalizeUsername, randomToken, requireAdmin, SESSION_COOKIE, setSessionCookie, validCsrf, verifyPassword } = require('../../lib/auth');
-const { query } = require('../../lib/db');
-const { findEligibleStaff, getRosterData } = require('../../lib/roster');
-const { ensureSchema } = require('../../lib/schema');
+const { audit, bootstrapAdmin, clearSessionCookie, hashPassword, hashToken, normalizeUsername, randomToken, requireAdmin, SESSION_COOKIE, setSessionCookie, validCsrf, verifyPassword } = require('../lib/auth');
+const { query } = require('../lib/db');
+const { findEligibleStaff, getRosterData } = require('../lib/roster');
+const { ensureSchema } = require('../lib/schema');
 
 function route(req) {
-  return Array.isArray(req.query.route) ? req.query.route.join('/') : String(req.query.route || '');
+  return String(req.query.route || '');
 }
 
 function methodNotAllowed(res) {
