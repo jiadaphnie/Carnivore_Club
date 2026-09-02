@@ -104,6 +104,31 @@
   .dashboard-status { color: var(--muted); font-size: 12px; min-height: 18px; margin: -16px 0 18px; }
   .dashboard-status.error { color: #b42318; }
   .empty-state { border: 1px dashed var(--border); border-radius: 8px; color: var(--muted); font-size: 13px; padding: 18px; text-align: center; }
+  body.dashboard-loading .meta-details,
+  body.dashboard-loading .kpi-grid,
+  body.dashboard-loading section { display: none; }
+  body.dashboard-loading .dashboard-status {
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    font-size: 14px;
+    gap: 12px;
+    justify-content: center;
+    margin: 36px 0;
+    min-height: 152px;
+  }
+  body.dashboard-loading .dashboard-status::before {
+    animation: loading-spin 0.8s linear infinite;
+    border: 3px solid var(--series-1-soft);
+    border-radius: 50%;
+    border-top-color: var(--series-1);
+    content: '';
+    height: 24px;
+    width: 24px;
+  }
+  body.dashboard-loading .dashboard-status::after { content: 'Loading current leaderboard...'; }
+  @keyframes loading-spin { to { transform: rotate(360deg); } }
   details.meta-details {
     margin-bottom: 28px;
   }
@@ -412,7 +437,7 @@
   }
 </style>
 </head>
-<body>
+<body class="dashboard-loading">
 <div class="wrap">
 
   <header class="page-head">
@@ -1341,6 +1366,7 @@ function renderDashboard(data) {
     if (heading.textContent.startsWith('Branch leaderboard')) heading.textContent = `Branch leaderboard · ${monthName}`;
     if (heading.textContent.startsWith('Full roster by branch')) heading.textContent = `Full roster by branch · ${monthName}`;
   });
+  document.body.classList.remove('dashboard-loading');
 }
 
 async function loadDashboard() {
@@ -1369,7 +1395,8 @@ document.querySelector('#month-select').addEventListener('change', event => {
 });
 
 loadDashboard().catch(error => {
-  document.querySelector('.dashboard-status').textContent = error.message;
+  document.body.classList.remove('dashboard-loading');
+  document.querySelector('.dashboard-status').textContent = `Live data could not load. Showing the last published dashboard. ${error.message}`;
   document.querySelector('.dashboard-status').classList.add('error');
 });
 setInterval(() => {
