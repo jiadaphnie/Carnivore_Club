@@ -34,6 +34,21 @@ The `POST /api/admin/backfill` route imports members created in September 2026 f
 
 The import is safe to retry because each Eber referee ID is stored once. It imports only referrals represented by Eber's `referral_user_id`; it does not recreate manually verified referrals absent from Eber.
 
+## Admin console
+Visit `/admin/` to add manual referrals and review the audit log. Manual entries require an eligible staff member, referral date, and a reason; they are included in the leaderboard immediately.
+
+To create the first super-admin, set these Vercel Production environment variables and deploy:
+
+```text
+BOOTSTRAP_ADMIN_USERNAME
+BOOTSTRAP_ADMIN_PASSWORD
+BOOTSTRAP_ENABLED=true
+```
+
+Sign in once at `/admin/` to create the super-admin account. That account can create named administrators, reset their passwords, and disable their access. New administrators receive a temporary password and must change it after signing in. Set `BOOTSTRAP_ENABLED=false` and redeploy after the first account exists.
+
+Admin passwords and sessions are stored as hashes in Neon. Every manual referral and account-management action is recorded in the admin audit log.
+
 ### One-time deployment setup
 1. Create a Neon Postgres database and set its pooled connection string as `DATABASE_URL` in Vercel.
 2. In Vercel, add `EBER_API_KEY`, `EBER_WEBHOOK_SECRET`, and `ADMIN_SECRET`. Generate the last two as unique long random values.

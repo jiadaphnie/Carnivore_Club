@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carnivore Club Admin</title>
+<style>
+  :root { --ink:#17211f; --muted:#64706d; --line:#d9e0dc; --page:#f3f5f2; --panel:#fff; --accent:#007a62; --accent-soft:#e3f3ed; --danger:#b42318; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--page); color:var(--ink); font-family:ui-sans-serif,system-ui,sans-serif; }
+  .shell { max-width:1040px; margin:0 auto; padding:32px 20px 64px; }
+  .topbar { align-items:center; display:flex; justify-content:space-between; margin-bottom:28px; }
+  h1,h2,p { margin:0; } h1 { font-size:26px; } h2 { font-size:15px; } .eyebrow { color:var(--muted); font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:20px; } .login { margin:12vh auto 0; max-width:390px; }
+  .grid { display:grid; gap:16px; grid-template-columns:minmax(0,1fr) minmax(320px,1.15fr); } .stack { display:grid; gap:16px; }
+  label { color:var(--muted); display:grid; font-size:12px; font-weight:700; gap:6px; letter-spacing:.03em; }
+  input,select,textarea { background:#fff; border:1px solid #bfc9c4; border-radius:6px; color:var(--ink); font:inherit; min-height:38px; padding:8px 10px; width:100%; } textarea { min-height:88px; resize:vertical; }
+  button { background:var(--accent); border:0; border-radius:6px; color:#fff; cursor:pointer; font:inherit; font-weight:700; min-height:38px; padding:8px 12px; } button.secondary { background:transparent; border:1px solid var(--line); color:var(--ink); } button.danger { background:var(--danger); } button:disabled { cursor:wait; opacity:.65; }
+  .row { align-items:end; display:flex; gap:10px; } .row > * { flex:1; } .row button { flex:0 0 auto; } .status { color:var(--muted); font-size:13px; min-height:20px; margin-top:12px; } .status.error { color:var(--danger); } .hidden { display:none !important; }
+  .tabs { border-bottom:1px solid var(--line); display:flex; gap:20px; margin-bottom:18px; } .tab { background:none; border:0; border-bottom:2px solid transparent; border-radius:0; color:var(--muted); padding:0 0 10px; } .tab.active { border-color:var(--accent); color:var(--ink); }
+  table { border-collapse:collapse; font-size:13px; width:100%; } th { color:var(--muted); font-size:11px; letter-spacing:.04em; text-align:left; text-transform:uppercase; } td,th { border-bottom:1px solid var(--line); padding:10px 8px; vertical-align:top; } .table-wrap { overflow-x:auto; } .badge { background:var(--accent-soft); border-radius:999px; color:var(--accent); display:inline-block; font-size:11px; font-weight:700; padding:3px 7px; } .admin-actions { display:flex; gap:6px; } .admin-actions button { font-size:12px; min-height:30px; padding:4px 8px; }
+  @media (max-width:720px) { .shell { padding:20px 12px 48px; } .grid { grid-template-columns:1fr; } .topbar { align-items:start; gap:12px; } .row { align-items:stretch; flex-direction:column; } .row button { flex:auto; } }
+</style>
+</head>
+<body>
+<main class="shell">
+  <section id="login-view" class="panel login">
+    <p class="eyebrow">Carnivore Club</p><h1>Admin access</h1>
+    <form id="login-form" class="stack" style="margin-top:20px">
+      <label>Username<input name="username" autocomplete="username" required></label>
+      <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+      <button>Sign in</button>
+    </form><p id="login-status" class="status"></p>
+  </section>
+  <section id="admin-view" class="hidden">
+    <header class="topbar"><div><p class="eyebrow">Carnivore Club</p><h1>Referral administration</h1></div><div class="row" style="align-items:center"><span id="admin-name" class="badge"></span><button id="logout" class="secondary">Log out</button></div></header>
+    <nav class="tabs"><button class="tab active" data-tab="entries">Manual entry</button><button class="tab" data-tab="audit">Audit log</button><button id="admins-tab" class="tab hidden" data-tab="admins">Admins</button></nav>
+    <section id="entries-panel" class="grid">
+      <form id="entry-form" class="panel stack"><div><p class="eyebrow">New adjustment</p><h2>Add one referral</h2></div>
+        <label>Referring staff member<select id="staff-select" name="staff_email" required><option value="">Loading staff...</option></select></label>
+        <label>Referral date<input id="referral-date" name="referral_date" type="date" required></label>
+        <label>Reason<textarea name="note" maxlength="500" placeholder="Why is this referral being entered manually?" required></textarea></label>
+        <button>Add referral</button><p id="entry-status" class="status"></p>
+      </form>
+      <div class="panel"><p class="eyebrow">Audit trail</p><h2>Recent changes</h2><div id="recent-log" class="table-wrap" style="margin-top:14px"></div></div>
+    </section>
+    <section id="audit-panel" class="panel hidden"><p class="eyebrow">Accountability</p><h2>Audit log</h2><div id="audit-log" class="table-wrap" style="margin-top:14px"></div></section>
+    <section id="admins-panel" class="stack hidden"><form id="admin-form" class="panel stack"><div><p class="eyebrow">Super-admin</p><h2>Create administrator</h2></div><div class="row"><label>Username<input name="username" required></label><label>Temporary password<input name="password" type="password" minlength="12" required></label><button>Create</button></div><p id="admin-status" class="status"></p></form><div class="panel"><h2>Administrator accounts</h2><div id="admin-list" class="table-wrap" style="margin-top:14px"></div></div></section>
+  </section>
+</main>
+<script>
+let csrfToken = ''; let currentAdmin;
+const $ = selector => document.querySelector(selector);
+const escapeHtml = value => String(value || '').replace(/[&<>"']/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[character]);
+function setStatus(selector, text, error = false) { const element = $(selector); element.textContent = text; element.classList.toggle('error', error); }
+async function request(url, options = {}) { const response = await fetch(url, { ...options, headers:{ 'Content-Type':'application/json', ...(options.headers || {}) } }); const data = await response.json().catch(() => ({})); if (!response.ok) throw new Error(data.error || 'Request failed'); return data; }
+function dateToday() { return new Intl.DateTimeFormat('en-CA', { timeZone:'Asia/Hong_Kong' }).format(new Date()); }
+function showTab(name) { document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === name)); ['entries','audit','admins'].forEach(tab => $(`#${tab}-panel`).classList.toggle('hidden', tab !== name)); if (name === 'audit') loadAudit(); if (name === 'admins') loadAdmins(); }
+function renderAudit(entries, selector) { $(selector).innerHTML = entries.length ? `<table><thead><tr><th>When</th><th>Admin</th><th>Action</th><th>Details</th></tr></thead><tbody>${entries.map(entry => `<tr><td>${new Date(entry.created_at).toLocaleString()}</td><td>${escapeHtml(entry.username || 'System')}</td><td>${escapeHtml(entry.action.replaceAll('_',' '))}</td><td>${escapeHtml(entry.details.note || entry.details.username || [entry.details.staff, entry.details.referral_date].filter(Boolean).join(' · ') || '—')}</td></tr>`).join('')}</tbody></table>` : '<p class="status">No activity yet.</p>'; }
+async function loadAudit() { const data = await request('/api/admin/audit-log'); renderAudit(data.entries, '#audit-log'); renderAudit(data.entries.slice(0,6), '#recent-log'); }
+async function loadRoster() { const data = await request('/api/admin/roster'); const groups = data.staff.reduce((result, staff) => { (result[staff.branch] ||= []).push(staff); return result; }, {}); $('#staff-select').innerHTML = '<option value="">Choose staff member</option>' + Object.entries(groups).map(([branch, staff]) => `<optgroup label="${escapeHtml(branch)}">${staff.map(member => `<option value="${escapeHtml(member.email)}">${escapeHtml(member.display_name)} · ${escapeHtml(member.role)}</option>`).join('')}</optgroup>`).join(''); }
+async function loadAdmins() { const data = await request('/api/admin/users'); $('#admin-list').innerHTML = `<table><thead><tr><th>Username</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>${data.users.map(user => `<tr><td>${escapeHtml(user.username)}</td><td>${escapeHtml(user.role)}</td><td>${user.active ? 'Active' : 'Disabled'}</td><td class="admin-actions">${user.active && user.id !== currentAdmin.id ? `<button class="secondary" data-reset="${user.id}" data-user="${escapeHtml(user.username)}">Reset password</button><button class="danger" data-disable="${user.id}">Disable</button>` : ''}</td></tr>`).join('')}</tbody></table>`; }
+async function establishSession(data) { currentAdmin = data.admin; csrfToken = data.csrf_token; $('#admin-name').textContent = data.admin.username; $('#login-view').classList.add('hidden'); $('#admin-view').classList.remove('hidden'); if (data.admin.role === 'super_admin') $('#admins-tab').classList.remove('hidden'); $('#referral-date').value = dateToday(); await Promise.all([loadRoster(), loadAudit()]); }
+$('#login-form').addEventListener('submit', async event => { event.preventDefault(); setStatus('#login-status','Signing in...'); try { await establishSession(await request('/api/admin/auth/login',{method:'POST',body:JSON.stringify(Object.fromEntries(new FormData(event.target)))})); } catch (error) { setStatus('#login-status',error.message,true); } });
+$('#entry-form').addEventListener('submit', async event => { event.preventDefault(); setStatus('#entry-status','Saving...'); try { await request('/api/admin/manual-referrals',{method:'POST',headers:{'X-CSRF-Token':csrfToken},body:JSON.stringify(Object.fromEntries(new FormData(event.target)))}); event.target.reset(); $('#referral-date').value=dateToday(); setStatus('#entry-status','Referral added and logged.'); await loadAudit(); } catch(error) { setStatus('#entry-status',error.message,true); } });
+$('#admin-form').addEventListener('submit', async event => { event.preventDefault(); try { await request('/api/admin/users',{method:'POST',headers:{'X-CSRF-Token':csrfToken},body:JSON.stringify(Object.fromEntries(new FormData(event.target)))}); event.target.reset(); setStatus('#admin-status','Admin account created.'); await loadAdmins(); } catch(error) { setStatus('#admin-status',error.message,true); } });
+$('#logout').addEventListener('click', async () => { await request('/api/admin/auth/logout',{method:'POST'}); window.location.reload(); });
+document.addEventListener('click', async event => { if (event.target.dataset.tab) showTab(event.target.dataset.tab); if (event.target.dataset.disable && confirm('Disable this administrator?')) { await request(`/api/admin/users/${event.target.dataset.disable}/disable`,{method:'POST',headers:{'X-CSRF-Token':csrfToken}}); loadAdmins(); } if (event.target.dataset.reset) { const password=prompt(`Temporary password for ${event.target.dataset.user} (at least 12 characters):`); if (password) { await request(`/api/admin/users/${event.target.dataset.reset}/reset-password`,{method:'POST',headers:{'X-CSRF-Token':csrfToken},body:JSON.stringify({password})}); alert('Password reset. Share the temporary password privately.'); } } });
+request('/api/admin/auth/me').then(establishSession).catch(() => {});
+</script>
+</body>
+</html>
