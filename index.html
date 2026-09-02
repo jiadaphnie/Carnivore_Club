@@ -1303,9 +1303,11 @@ function renderDashboard(data) {
   selector.innerHTML = data.available_months.map(key => `<option value="${key}">${escapeHtml(data.month_names[key])}</option>`).join('');
   selector.value = month;
   selector.disabled = false;
-  document.querySelector('.dashboard-status').textContent = month === data.current_month && monthStats.referrals === 0
-    ? 'No referrals recorded yet for this month. Historical results remain available above.'
-    : '';
+  const status = document.querySelector('.dashboard-status');
+  if (data.sync_in_progress) status.textContent = 'Updating referrals from Eber...';
+  else if (data.last_successful_sync_at) status.textContent = `Eber data synced ${new Date(data.last_successful_sync_at).toLocaleString()}`;
+  else if (month === data.current_month && monthStats.referrals === 0) status.textContent = 'No referrals recorded yet for this month. Historical results remain available above.';
+  else status.textContent = '';
   document.querySelector('.kpi-grid').innerHTML = `
     <div class="kpi-tile"><div class="kpi-value">${monthStats.referrals}</div><div class="kpi-label">Referrals this month</div></div>
     <div class="kpi-tile"><div class="kpi-value">HKD ${monthStats.bonus}</div><div class="kpi-label">Total referral bonus</div></div>

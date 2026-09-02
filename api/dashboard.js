@@ -1,5 +1,6 @@
 const { getDashboard } = require('../lib/dashboard');
 const { ensureSchema } = require('../lib/schema');
+const { ensureFreshReferrals, getSyncState } = require('../lib/sync');
 
 module.exports = async (req, res) => {
   if (req.method !== 'GET') {
@@ -10,9 +11,14 @@ module.exports = async (req, res) => {
 
   try {
     await ensureSchema();
+    const sync = req.query.month ? { state: await getSyncState(), sync_in_progress: false } : await ensureFreshReferrals();
     const dashboard = await getDashboard(req.query.month);
-    res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
-    res.status(200).json(dashboard);
+    res.setHeader('Cache-Control', 'no-store');
+    res.status(200).json({
+      ...dashboard,
+      last_successful_sync_at: sync.state && sync.state.last_successful_at,
+      sync_in_progress: sync.sync_in_progress,
+    });
   } catch (error) {
     console.error('Dashboard error:', error.message);
     res.status(error.statusCode || 500).json({ error: error.statusCode ? error.message : 'Dashboard is temporarily unavailable' });

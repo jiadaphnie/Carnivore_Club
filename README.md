@@ -14,6 +14,8 @@ Managers (Manager, Assistant Manager, Restaurant Manager, Floor Manager, and the
 ## Live updates
 The deployed dashboard loads its live data from `/api/dashboard`. Eber sends a `user_create` webhook whenever a member is created. The webhook handler fetches that member from Eber's API, reads `referral_user_id`, resolves the staff referrer, and records one referral in Neon Postgres.
 
+Eber webhook provisioning is not currently available for this account. Instead, the first visit after 15 minutes automatically checks Eber for members added since the last successful sync, with a 30-minute overlap for delayed records. The visitor sees the saved dashboard while the sync runs, then the page refreshes its data. If nobody visits, no sync runs.
+
 The current `data/dashboard_data.json` is retained as the source roster/configuration and as the one-time seed for the existing historical totals. New webhook referrals are added to those seeded totals. Staff eligibility, branch, role, and display name come from this versioned roster; Eber staff tiers/tags are checked as a second eligibility signal.
 
 Referrals count immediately in the `Asia/Hong_Kong` month. Cancellation/reversal reconciliation is intentionally out of scope.
