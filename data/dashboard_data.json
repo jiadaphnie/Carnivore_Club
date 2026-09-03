@@ -101,6 +101,21 @@
       "bonus_this_month": 30
     },
     {
+      "branch": "TLF",
+      "full_name": "CaLe DeLa Paz",
+      "role": "PT server",
+      "preferred_name": "Caloy",
+      "email": "delapazcale@gmail.com",
+      "is_manager": false,
+      "display_name": "Caloy",
+      "referrals": 0,
+      "bonus": 0,
+      "vouchers": 0,
+      "by_month": {},
+      "referrals_this_month": 0,
+      "bonus_this_month": 0
+    },
+    {
       "branch": "FIS - Causeway Bay",
       "full_name": "Bumagat Harron Floyd Cabusas",
       "role": "Server",
