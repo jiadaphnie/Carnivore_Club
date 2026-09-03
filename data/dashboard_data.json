@@ -1100,6 +1100,21 @@
       "bonus_this_month": 0
     },
     {
+      "branch": "Picanhas",
+      "full_name": "Annie Whu",
+      "role": "Chef",
+      "preferred_name": "Annie",
+      "email": "anniewhuli30@gmail.com",
+      "is_manager": false,
+      "display_name": "Annie",
+      "referrals": 0,
+      "bonus": 0,
+      "vouchers": 0,
+      "by_month": {},
+      "referrals_this_month": 0,
+      "bonus_this_month": 0
+    },
+    {
       "branch": "FIS - Soho",
       "full_name": "Samita Bhandari",
       "role": "Server",
