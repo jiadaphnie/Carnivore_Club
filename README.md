@@ -16,7 +16,7 @@ The deployed dashboard loads its live data from `/api/dashboard`. Eber sends a `
 
 Eber webhook provisioning is not currently available for this account. Instead, the first visit after 15 minutes automatically checks Eber for members added since the last successful sync, with a 30-minute overlap for delayed records. The visitor sees the saved dashboard while the sync runs, then the page refreshes its data. If nobody visits, no sync runs.
 
-The current `data/dashboard_data.json` is retained as the source roster/configuration and as the one-time seed for the existing historical totals. New webhook referrals are added to those seeded totals. Staff eligibility, branch, role, and display name come from this versioned roster; Eber staff tiers/tags are checked as a second eligibility signal.
+The current `data/dashboard_data.json` is retained as the one-time seed for staff master data and the existing historical totals; `POST /api/admin/seed` migrates its `staff` array into a Neon `staff` table, which is the live source of roster data afterward. New webhook referrals are added to those seeded totals. Staff eligibility, branch, role, and display name come from the `staff` table; Eber staff tiers/tags are checked as a second eligibility signal.
 
 Referrals count immediately in the `Asia/Hong_Kong` month. Cancellation/reversal reconciliation is intentionally out of scope.
 
@@ -35,7 +35,7 @@ The `POST /api/admin/backfill` route imports members created in September 2026 f
 The import is safe to retry because each Eber referee ID is stored once. It imports only referrals represented by Eber's `referral_user_id`; it does not recreate manually verified referrals absent from Eber.
 
 ## Admin console
-Visit `/admin/` to add manual referrals and review the audit log. Manual entries require an eligible staff member, referral date, and a reason; they are included in the leaderboard immediately.
+Visit `/admin/` to add manual referrals, manage staff, and review the audit log. Manual entries require an eligible staff member, referral date, and a reason; they are included in the leaderboard immediately. The Staff tab adds, edits, and deactivates/reactivates staff, including past per-month referral totals entered at creation time.
 
 To create the first super-admin, set these Vercel Production environment variables and deploy:
 

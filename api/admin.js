@@ -1,6 +1,6 @@
 const { audit, bootstrapAdmin, clearSessionCookie, hashPassword, hashToken, normalizeUsername, randomToken, requireAdmin, SESSION_COOKIE, setSessionCookie, validCsrf, verifyPassword } = require('../lib/auth');
 const { query } = require('../lib/db');
-const { findEligibleStaff, getRosterData } = require('../lib/roster');
+const { findEligibleStaff, getBranches, getRosterData, normalizeEmail } = require('../lib/roster');
 const { ensureSchema } = require('../lib/schema');
 
 function route(req) {
@@ -64,8 +64,94 @@ async function roster(req, res) {
   if (req.method !== 'GET') return methodNotAllowed(res);
   const admin = await requireAdmin(req, res);
   if (!admin) return;
-  const staff = getRosterData().staff.filter(member => !member.is_manager).map(({ email, display_name, role, branch }) => ({ email, display_name, role, branch }));
+  const staff = (await getRosterData()).staff.filter(member => !member.is_manager).map(({ email, display_name, role, branch }) => ({ email, display_name, role, branch }));
   res.status(200).json({ staff });
+}
+
+function validStaffFields(body) {
+  const branch = String(body && body.branch || '');
+  const fullName = String(body && body.full_name || '').trim();
+  const preferredName = String(body && body.preferred_name || '').trim();
+  const displayName = String(body && body.display_name || '').trim();
+  const email = normalizeEmail(body && body.email);
+  const role = String(body && body.role || '').trim();
+  const isManager = Boolean(body && body.is_manager);
+  if (!getBranches().includes(branch)) return { error: 'Choose a valid branch' };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: 'A valid email is required' };
+  if (!fullName || !displayName || !role) return { error: 'Full name, display name, and role are required' };
+  return { fields: { branch, displayName, email, fullName, isManager, preferredName, role } };
+}
+
+function validMonthlyBaselines(body) {
+  const rows = Array.isArray(body && body.monthly_baselines) ? body.monthly_baselines : [];
+  const baselines = [];
+  for (const row of rows) {
+    const month = String(row && row.month || '');
+    const referrals = Number(row && row.referrals);
+    if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(month) || !Number.isInteger(referrals) || referrals < 0) return null;
+    baselines.push({ month, referrals });
+  }
+  return baselines;
+}
+
+async function staffList(req, res) {
+  if (req.method !== 'GET') return methodNotAllowed(res);
+  const admin = await requireAdmin(req, res);
+  if (!admin) return;
+  const staff = await query(`SELECT email, branch, full_name, preferred_name, display_name, role, is_manager, active
+    FROM staff ORDER BY active DESC, branch, display_name`);
+  res.status(200).json({ branches: getBranches(), staff });
+}
+
+async function createStaff(req, res) {
+  if (req.method !== 'POST') return methodNotAllowed(res);
+  const admin = await requireAdmin(req, res);
+  if (!admin) return;
+  if (!validCsrf(req, admin)) return res.status(403).json({ error: 'Invalid request token' });
+  const { error, fields } = validStaffFields(req.body);
+  if (error) return res.status(400).json({ error });
+  const baselines = validMonthlyBaselines(req.body);
+  if (baselines === null) return res.status(400).json({ error: 'Each past referral row needs a YYYY-MM month and a non-negative whole number' });
+  try {
+    await query(`INSERT INTO staff (email, branch, full_name, preferred_name, display_name, role, is_manager, created_by)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+      [fields.email, fields.branch, fields.fullName, fields.preferredName, fields.displayName, fields.role, fields.isManager, admin.id]);
+  } catch {
+    return res.status(409).json({ error: 'That email is already registered to a staff member' });
+  }
+  for (const baseline of baselines) {
+    await query(`INSERT INTO monthly_staff_baselines (staff_email, month, referrals)
+      VALUES ($1, $2, $3) ON CONFLICT (staff_email, month) DO UPDATE SET referrals = EXCLUDED.referrals`,
+      [fields.email, baseline.month, baseline.referrals]);
+  }
+  await audit(admin.id, 'staff_created', 'staff', fields.email, { branch: fields.branch, display_name: fields.displayName });
+  res.status(201).json({ ok: true, email: fields.email });
+}
+
+async function updateStaff(req, res, email) {
+  if (req.method !== 'POST') return methodNotAllowed(res);
+  const admin = await requireAdmin(req, res);
+  if (!admin) return;
+  if (!validCsrf(req, admin)) return res.status(403).json({ error: 'Invalid request token' });
+  const { error, fields } = validStaffFields({ ...req.body, email });
+  if (error) return res.status(400).json({ error });
+  const target = await query(`UPDATE staff SET branch = $2, full_name = $3, preferred_name = $4, display_name = $5, role = $6, is_manager = $7, updated_at = NOW()
+    WHERE email = $1 RETURNING email`, [normalizeEmail(email), fields.branch, fields.fullName, fields.preferredName, fields.displayName, fields.role, fields.isManager]);
+  if (!target.length) return res.status(404).json({ error: 'Staff member not found' });
+  await audit(admin.id, 'staff_updated', 'staff', email, { branch: fields.branch, display_name: fields.displayName });
+  res.status(200).json({ ok: true });
+}
+
+async function setStaffActive(req, res, email, active) {
+  if (req.method !== 'POST') return methodNotAllowed(res);
+  const admin = await requireAdmin(req, res);
+  if (!admin) return;
+  if (!validCsrf(req, admin)) return res.status(403).json({ error: 'Invalid request token' });
+  const target = await query('UPDATE staff SET active = $2, updated_at = NOW() WHERE email = $1 RETURNING email',
+    [normalizeEmail(email), active]);
+  if (!target.length) return res.status(404).json({ error: 'Staff member not found' });
+  await audit(admin.id, active ? 'staff_reactivated' : 'staff_deactivated', 'staff', email);
+  res.status(200).json({ ok: true });
 }
 
 async function manualReferral(req, res) {
@@ -77,7 +163,7 @@ async function manualReferral(req, res) {
   const date = String(req.body && req.body.referral_date || '');
   const note = String(req.body && req.body.note || '').trim();
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || note.length < 3 || note.length > 500) return res.status(400).json({ error: 'Staff, a valid referral date, and a 3-500 character reason are required' });
-  const staff = findEligibleStaff(email);
+  const staff = await findEligibleStaff(email);
   if (!staff) return res.status(400).json({ error: 'Choose an eligible staff member' });
   const rows = await query(`INSERT INTO manual_referrals (staff_email, occurred_at, note, created_by)
     VALUES ($1, $2, $3, $4) RETURNING id`, [staff.email, `${date}T12:00:00+08:00`, note, admin.id]);
@@ -152,6 +238,13 @@ module.exports = async (req, res) => {
     if (path === 'users') return users(req, res);
     const match = path.match(/^users\/([^/]+)\/(disable|reset-password)$/);
     if (match) return manageUser(req, res, match[2], match[1]);
+    if (path === 'staff') return req.method === 'GET' ? staffList(req, res) : createStaff(req, res);
+    const staffMatch = path.match(/^staff\/([^/]+)\/(update|deactivate|reactivate)$/);
+    if (staffMatch) {
+      const [, email, action] = staffMatch;
+      if (action === 'update') return updateStaff(req, res, decodeURIComponent(email));
+      return setStaffActive(req, res, decodeURIComponent(email), action === 'reactivate');
+    }
     res.status(404).json({ error: 'Not found' });
   } catch (error) {
     console.error('Admin API error:', error.message);

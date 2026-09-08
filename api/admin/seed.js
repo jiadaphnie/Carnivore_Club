@@ -24,6 +24,12 @@ module.exports = async (req, res) => {
 
     for (const member of data.staff) {
       const email = normalizeEmail(member.email);
+      await query(
+        `INSERT INTO staff (email, branch, full_name, preferred_name, display_name, role, is_manager)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         ON CONFLICT (email) DO NOTHING`,
+        [email, member.branch, member.full_name, member.preferred_name, member.display_name, member.role, Boolean(member.is_manager)],
+      );
       for (const [month, referrals] of Object.entries(member.by_month || {})) {
         await query(
           `INSERT INTO monthly_staff_baselines (staff_email, month, referrals)

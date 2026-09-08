@@ -34,7 +34,7 @@
   </section>
   <section id="admin-view" class="hidden">
     <header class="topbar"><div><p class="eyebrow">Carnivore Club</p><h1>Referral administration</h1></div><div class="row" style="align-items:center"><span id="admin-name" class="badge"></span><button id="logout" class="secondary">Log out</button></div></header>
-    <nav class="tabs"><button class="tab active" data-tab="entries">Manual entry</button><button class="tab" data-tab="audit">Audit log</button><button id="admins-tab" class="tab hidden" data-tab="admins">Admins</button></nav>
+    <nav class="tabs"><button class="tab active" data-tab="entries">Manual entry</button><button class="tab" data-tab="audit">Audit log</button><button class="tab" data-tab="staff">Staff</button><button id="admins-tab" class="tab hidden" data-tab="admins">Admins</button></nav>
     <section id="entries-panel" class="grid">
       <form id="entry-form" class="panel stack"><div><p class="eyebrow">New adjustment</p><h2>Add one referral</h2></div>
         <label>Referring staff member<select id="staff-select" name="staff_email" required><option value="">Loading staff...</option></select></label>
@@ -45,6 +45,35 @@
       <div class="panel"><p class="eyebrow">Audit trail</p><h2>Recent changes</h2><div id="recent-log" class="table-wrap" style="margin-top:14px"></div></div>
     </section>
     <section id="audit-panel" class="panel hidden"><p class="eyebrow">Accountability</p><h2>Audit log</h2><div id="audit-log" class="table-wrap" style="margin-top:14px"></div></section>
+    <section id="staff-panel" class="grid hidden">
+      <form id="staff-form" class="panel stack">
+        <div><p class="eyebrow" id="staff-form-eyebrow">New employee</p><h2 id="staff-form-title">Add staff member</h2></div>
+        <div class="row">
+          <label>Branch<select name="branch" required><option value="">Choose branch</option></select></label>
+          <label>Role<input name="role" required></label>
+        </div>
+        <div class="row">
+          <label>Full name<input name="full_name" required></label>
+          <label>Preferred name<input name="preferred_name"></label>
+        </div>
+        <div class="row">
+          <label>Display name<input name="display_name" required></label>
+          <label>Email<input id="staff-email-input" name="email" type="email" required></label>
+        </div>
+        <label style="align-items:center;flex-direction:row;gap:8px"><input id="staff-is-manager" name="is_manager" style="min-height:auto;width:auto" type="checkbox"> Manager (excluded from referral competition)</label>
+        <div id="baseline-section">
+          <p class="eyebrow">Past referrals by month</p>
+          <div id="baseline-rows" class="stack" style="gap:8px"></div>
+          <button id="add-baseline-row" class="secondary" style="margin-top:8px" type="button">+ Add month</button>
+        </div>
+        <div class="row">
+          <button>Save staff member</button>
+          <button class="secondary hidden" id="staff-cancel-edit" type="button">Cancel edit</button>
+        </div>
+        <p id="staff-status" class="status"></p>
+      </form>
+      <div class="panel"><p class="eyebrow">Roster</p><h2>Staff accounts</h2><div id="staff-list" class="table-wrap" style="margin-top:14px"></div></div>
+    </section>
     <section id="admins-panel" class="stack hidden"><form id="admin-form" class="panel stack"><div><p class="eyebrow">Super-admin</p><h2>Create administrator</h2></div><div class="row"><label>Username<input name="username" required></label><label>Temporary password<input name="password" type="password" minlength="12" required></label><button>Create</button></div><p id="admin-status" class="status"></p></form><div class="panel"><h2>Administrator accounts</h2><div id="admin-list" class="table-wrap" style="margin-top:14px"></div></div></section>
   </section>
 </main>
@@ -55,17 +84,36 @@ const escapeHtml = value => String(value || '').replace(/[&<>"']/g, character =>
 function setStatus(selector, text, error = false) { const element = $(selector); element.textContent = text; element.classList.toggle('error', error); }
 async function request(url, options = {}) { const response = await fetch(url, { ...options, headers:{ 'Content-Type':'application/json', ...(options.headers || {}) } }); const data = await response.json().catch(() => ({})); if (!response.ok) throw new Error(data.error || 'Request failed'); return data; }
 function dateToday() { return new Intl.DateTimeFormat('en-CA', { timeZone:'Asia/Hong_Kong' }).format(new Date()); }
-function showTab(name) { document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === name)); ['entries','audit','admins'].forEach(tab => $(`#${tab}-panel`).classList.toggle('hidden', tab !== name)); if (name === 'audit') loadAudit(); if (name === 'admins') loadAdmins(); }
+function showTab(name) { document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === name)); ['entries','audit','staff','admins'].forEach(tab => $(`#${tab}-panel`).classList.toggle('hidden', tab !== name)); if (name === 'audit') loadAudit(); if (name === 'staff') loadStaff(); if (name === 'admins') loadAdmins(); }
 function renderAudit(entries, selector) { $(selector).innerHTML = entries.length ? `<table><thead><tr><th>When</th><th>Admin</th><th>Action</th><th>Details</th></tr></thead><tbody>${entries.map(entry => `<tr><td>${new Date(entry.created_at).toLocaleString()}</td><td>${escapeHtml(entry.username || 'System')}</td><td>${escapeHtml(entry.action.replaceAll('_',' '))}</td><td>${escapeHtml(entry.details.note || entry.details.username || [entry.details.staff, entry.details.referral_date].filter(Boolean).join(' · ') || '—')}</td></tr>`).join('')}</tbody></table>` : '<p class="status">No activity yet.</p>'; }
 async function loadAudit() { const data = await request('/api/admin/audit-log'); renderAudit(data.entries, '#audit-log'); renderAudit(data.entries.slice(0,6), '#recent-log'); }
 async function loadRoster() { const data = await request('/api/admin/roster'); const groups = data.staff.reduce((result, staff) => { (result[staff.branch] ||= []).push(staff); return result; }, {}); $('#staff-select').innerHTML = '<option value="">Choose staff member</option>' + Object.entries(groups).map(([branch, staff]) => `<optgroup label="${escapeHtml(branch)}">${staff.map(member => `<option value="${escapeHtml(member.email)}">${escapeHtml(member.display_name)} · ${escapeHtml(member.role)}</option>`).join('')}</optgroup>`).join(''); }
 async function loadAdmins() { const data = await request('/api/admin/users'); $('#admin-list').innerHTML = `<table><thead><tr><th>Username</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>${data.users.map(user => `<tr><td>${escapeHtml(user.username)}</td><td>${escapeHtml(user.role)}</td><td>${user.active ? 'Active' : 'Disabled'}</td><td class="admin-actions">${user.active && user.id !== currentAdmin.id ? `<button class="secondary" data-reset="${user.id}" data-user="${escapeHtml(user.username)}">Reset password</button><button class="danger" data-disable="${user.id}">Disable</button>` : ''}</td></tr>`).join('')}</tbody></table>`; }
+let editingStaffEmail = null;
+function addBaselineRow(month = '', referrals = '') { const row = document.createElement('div'); row.className = 'row baseline-row'; row.innerHTML = `<label>Month<input type="month" class="baseline-month" value="${escapeHtml(month)}"></label><label>Referrals<input type="number" min="0" step="1" class="baseline-referrals" value="${escapeHtml(String(referrals))}"></label><button type="button" class="secondary" data-remove-baseline>Remove</button>`; $('#baseline-rows').appendChild(row); }
+function collectBaselines() { return [...document.querySelectorAll('.baseline-row')].map(row => ({ month: row.querySelector('.baseline-month').value, referrals: Number(row.querySelector('.baseline-referrals').value) })).filter(entry => entry.month); }
+function resetStaffForm() { editingStaffEmail = null; $('#staff-form').reset(); $('#baseline-rows').innerHTML = ''; $('#staff-email-input').disabled = false; $('#baseline-section').classList.remove('hidden'); $('#staff-form-eyebrow').textContent = 'New employee'; $('#staff-form-title').textContent = 'Add staff member'; $('#staff-cancel-edit').classList.add('hidden'); }
+function editStaffMember(member) { editingStaffEmail = member.email; const form = $('#staff-form'); form.branch.value = member.branch; form.role.value = member.role; form.full_name.value = member.full_name; form.preferred_name.value = member.preferred_name || ''; form.display_name.value = member.display_name; form.email.value = member.email; form.is_manager.checked = member.is_manager; $('#staff-email-input').disabled = true; $('#baseline-section').classList.add('hidden'); $('#baseline-rows').innerHTML = ''; $('#staff-form-eyebrow').textContent = 'Existing employee'; $('#staff-form-title').textContent = `Edit ${member.display_name}`; $('#staff-cancel-edit').classList.remove('hidden'); window.scrollTo({ top: $('#staff-form').offsetTop, behavior: 'smooth' }); }
+function renderStaffTable(staff) { $('#staff-list').innerHTML = staff.length ? `<table><thead><tr><th>Name</th><th>Branch</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>${staff.map(member => `<tr><td>${escapeHtml(member.display_name)}${member.is_manager ? ' <span class="badge">Manager</span>' : ''}</td><td>${escapeHtml(member.branch)}</td><td>${escapeHtml(member.role)}</td><td>${member.active ? 'Active' : 'Inactive'}</td><td class="admin-actions"><button class="secondary" data-edit-staff="${escapeHtml(member.email)}">Edit</button>${member.active ? `<button class="danger" data-deactivate-staff="${escapeHtml(member.email)}">Deactivate</button>` : `<button class="secondary" data-reactivate-staff="${escapeHtml(member.email)}">Reactivate</button>`}</td></tr>`).join('')}</tbody></table>` : '<p class="status">No staff yet.</p>'; }
+let staffByEmail = new Map();
+async function loadStaff() { const data = await request('/api/admin/staff'); staffByEmail = new Map(data.staff.map(member => [member.email, member])); $('#staff-form select[name="branch"]').innerHTML = '<option value="">Choose branch</option>' + data.branches.map(branch => `<option value="${escapeHtml(branch)}">${escapeHtml(branch)}</option>`).join(''); renderStaffTable(data.staff); }
 async function establishSession(data) { currentAdmin = data.admin; csrfToken = data.csrf_token; $('#admin-name').textContent = data.admin.username; $('#login-view').classList.add('hidden'); $('#admin-view').classList.remove('hidden'); if (data.admin.role === 'super_admin') $('#admins-tab').classList.remove('hidden'); $('#referral-date').value = dateToday(); await Promise.all([loadRoster(), loadAudit()]); }
 $('#login-form').addEventListener('submit', async event => { event.preventDefault(); setStatus('#login-status','Signing in...'); try { await establishSession(await request('/api/admin/auth/login',{method:'POST',body:JSON.stringify(Object.fromEntries(new FormData(event.target)))})); } catch (error) { setStatus('#login-status',error.message,true); } });
 $('#entry-form').addEventListener('submit', async event => { event.preventDefault(); setStatus('#entry-status','Saving...'); try { await request('/api/admin/manual-referrals',{method:'POST',headers:{'X-CSRF-Token':csrfToken},body:JSON.stringify(Object.fromEntries(new FormData(event.target)))}); event.target.reset(); $('#referral-date').value=dateToday(); setStatus('#entry-status','Referral added and logged.'); await loadAudit(); } catch(error) { setStatus('#entry-status',error.message,true); } });
 $('#admin-form').addEventListener('submit', async event => { event.preventDefault(); try { await request('/api/admin/users',{method:'POST',headers:{'X-CSRF-Token':csrfToken},body:JSON.stringify(Object.fromEntries(new FormData(event.target)))}); event.target.reset(); setStatus('#admin-status','Admin account created.'); await loadAdmins(); } catch(error) { setStatus('#admin-status',error.message,true); } });
 $('#logout').addEventListener('click', async () => { await request('/api/admin/auth/logout',{method:'POST'}); window.location.reload(); });
-document.addEventListener('click', async event => { if (event.target.dataset.tab) showTab(event.target.dataset.tab); if (event.target.dataset.disable && confirm('Disable this administrator?')) { await request(`/api/admin/users/${event.target.dataset.disable}/disable`,{method:'POST',headers:{'X-CSRF-Token':csrfToken}}); loadAdmins(); } if (event.target.dataset.reset) { const password=prompt(`Temporary password for ${event.target.dataset.user} (at least 12 characters):`); if (password) { await request(`/api/admin/users/${event.target.dataset.reset}/reset-password`,{method:'POST',headers:{'X-CSRF-Token':csrfToken},body:JSON.stringify({password})}); alert('Password reset. Share the temporary password privately.'); } } });
+$('#add-baseline-row').addEventListener('click', () => addBaselineRow());
+$('#staff-cancel-edit').addEventListener('click', resetStaffForm);
+$('#staff-form').addEventListener('submit', async event => { event.preventDefault(); setStatus('#staff-status','Saving...'); try { const fields = Object.fromEntries(new FormData(event.target)); fields.is_manager = Boolean(fields.is_manager); if (editingStaffEmail) { await request(`/api/admin/staff/${encodeURIComponent(editingStaffEmail)}/update`,{method:'POST',headers:{'X-CSRF-Token':csrfToken},body:JSON.stringify(fields)}); setStatus('#staff-status','Staff member updated.'); } else { fields.monthly_baselines = collectBaselines(); await request('/api/admin/staff',{method:'POST',headers:{'X-CSRF-Token':csrfToken},body:JSON.stringify(fields)}); setStatus('#staff-status','Staff member added.'); } resetStaffForm(); await loadStaff(); } catch(error) { setStatus('#staff-status',error.message,true); } });
+document.addEventListener('click', async event => {
+  if (event.target.dataset.tab) showTab(event.target.dataset.tab);
+  if (event.target.dataset.disable && confirm('Disable this administrator?')) { await request(`/api/admin/users/${event.target.dataset.disable}/disable`,{method:'POST',headers:{'X-CSRF-Token':csrfToken}}); loadAdmins(); }
+  if (event.target.dataset.reset) { const password=prompt(`Temporary password for ${event.target.dataset.user} (at least 12 characters):`); if (password) { await request(`/api/admin/users/${event.target.dataset.reset}/reset-password`,{method:'POST',headers:{'X-CSRF-Token':csrfToken},body:JSON.stringify({password})}); alert('Password reset. Share the temporary password privately.'); } }
+  if (event.target.dataset.removeBaseline !== undefined) event.target.closest('.baseline-row').remove();
+  if (event.target.dataset.editStaff) editStaffMember(staffByEmail.get(event.target.dataset.editStaff));
+  if (event.target.dataset.deactivateStaff && confirm('Deactivate this staff member?')) { await request(`/api/admin/staff/${encodeURIComponent(event.target.dataset.deactivateStaff)}/deactivate`,{method:'POST',headers:{'X-CSRF-Token':csrfToken}}); loadStaff(); }
+  if (event.target.dataset.reactivateStaff) { await request(`/api/admin/staff/${encodeURIComponent(event.target.dataset.reactivateStaff)}/reactivate`,{method:'POST',headers:{'X-CSRF-Token':csrfToken}}); loadStaff(); }
+});
 request('/api/admin/auth/me').then(establishSession).catch(() => {});
 </script>
 </body>
