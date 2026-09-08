@@ -31,10 +31,11 @@ module.exports = async (req, res) => {
         [email, member.branch, member.full_name, member.preferred_name, member.display_name, member.role, Boolean(member.is_manager)],
       );
       for (const [month, referrals] of Object.entries(member.by_month || {})) {
+        // Never overwrite an already-seeded/corrected baseline with a possibly-stale JSON number.
         await query(
           `INSERT INTO monthly_staff_baselines (staff_email, month, referrals)
            VALUES ($1, $2, $3)
-           ON CONFLICT (staff_email, month) DO UPDATE SET referrals = EXCLUDED.referrals`,
+           ON CONFLICT (staff_email, month) DO NOTHING`,
           [email, month, referrals],
         );
       }
@@ -44,7 +45,7 @@ module.exports = async (req, res) => {
       await query(
         `INSERT INTO monthly_baselines (month, referrals)
          VALUES ($1, $2)
-         ON CONFLICT (month) DO UPDATE SET referrals = EXCLUDED.referrals`,
+         ON CONFLICT (month) DO NOTHING`,
         [month, values.referrals],
       );
     }
