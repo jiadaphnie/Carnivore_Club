@@ -1,6 +1,6 @@
 const { audit, bootstrapAdmin, clearSessionCookie, hashPassword, hashToken, normalizeUsername, randomToken, requireAdmin, SESSION_COOKIE, setSessionCookie, validCsrf, verifyPassword } = require('../lib/auth');
 const { query } = require('../lib/db');
-const { findEligibleStaff, getBranches, getRosterData, normalizeEmail } = require('../lib/roster');
+const { findEligibleStaff, getBranchList, getBranches, getRosterData, normalizeEmail } = require('../lib/roster');
 const { ensureSchema } = require('../lib/schema');
 
 function route(req) {
@@ -68,7 +68,7 @@ async function roster(req, res) {
   res.status(200).json({ staff });
 }
 
-function validStaffFields(body) {
+async function validStaffFields(body) {
   const branch = String(body && body.branch || '');
   const fullName = String(body && body.full_name || '').trim();
   const preferredName = String(body && body.preferred_name || '').trim();
@@ -76,7 +76,7 @@ function validStaffFields(body) {
   const email = normalizeEmail(body && body.email);
   const role = String(body && body.role || '').trim();
   const isManager = Boolean(body && body.is_manager);
-  if (!getBranches().includes(branch)) return { error: 'Choose a valid branch' };
+  if (!(await getBranches()).includes(branch)) return { error: 'Choose a valid branch' };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: 'A valid email is required' };
   if (!fullName || !displayName || !role) return { error: 'Full name, display name, and role are required' };
   return { fields: { branch, displayName, email, fullName, isManager, preferredName, role } };
@@ -100,7 +100,7 @@ async function staffList(req, res) {
   if (!admin) return;
   const staff = await query(`SELECT email, branch, full_name, preferred_name, display_name, role, is_manager, active
     FROM staff ORDER BY active DESC, branch, display_name`);
-  res.status(200).json({ branches: getBranches(), staff });
+  res.status(200).json({ branches: await getBranches(), staff });
 }
 
 async function createStaff(req, res) {
@@ -108,7 +108,7 @@ async function createStaff(req, res) {
   const admin = await requireAdmin(req, res);
   if (!admin) return;
   if (!validCsrf(req, admin)) return res.status(403).json({ error: 'Invalid request token' });
-  const { error, fields } = validStaffFields(req.body);
+  const { error, fields } = await validStaffFields(req.body);
   if (error) return res.status(400).json({ error });
   const baselines = validMonthlyBaselines(req.body);
   if (baselines === null) return res.status(400).json({ error: 'Each past referral row needs a YYYY-MM month and a non-negative whole number' });
@@ -133,7 +133,7 @@ async function updateStaff(req, res, email) {
   const admin = await requireAdmin(req, res);
   if (!admin) return;
   if (!validCsrf(req, admin)) return res.status(403).json({ error: 'Invalid request token' });
-  const { error, fields } = validStaffFields({ ...req.body, email });
+  const { error, fields } = await validStaffFields({ ...req.body, email });
   if (error) return res.status(400).json({ error });
   const target = await query(`UPDATE staff SET branch = $2, full_name = $3, preferred_name = $4, display_name = $5, role = $6, is_manager = $7, updated_at = NOW()
     WHERE email = $1 RETURNING email`, [normalizeEmail(email), fields.branch, fields.fullName, fields.preferredName, fields.displayName, fields.role, fields.isManager]);
@@ -151,6 +151,55 @@ async function setStaffActive(req, res, email, active) {
     [normalizeEmail(email), active]);
   if (!target.length) return res.status(404).json({ error: 'Staff member not found' });
   await audit(admin.id, active ? 'staff_reactivated' : 'staff_deactivated', 'staff', email);
+  res.status(200).json({ ok: true });
+}
+
+function validBranchFields(body) {
+  const name = String(body && body.name || '').trim();
+  const target = Number(body && body.monthly_target);
+  if (!name || name.length > 60) return { error: 'Branch name is required (up to 60 characters)' };
+  if (!Number.isInteger(target) || target < 0 || target > 1000000) return { error: 'Monthly target must be a non-negative whole number' };
+  return { fields: { name, target } };
+}
+
+async function branches(req, res) {
+  const admin = await requireAdmin(req, res);
+  if (!admin) return;
+  if (req.method === 'GET') return res.status(200).json({ branches: await getBranchList() });
+  if (req.method !== 'POST') return methodNotAllowed(res);
+  if (!validCsrf(req, admin)) return res.status(403).json({ error: 'Invalid request token' });
+  const { error, fields } = validBranchFields(req.body);
+  if (error) return res.status(400).json({ error });
+  try {
+    const created = await query('INSERT INTO branches (name, monthly_target, created_by) VALUES ($1, $2, $3) RETURNING id',
+      [fields.name, fields.target, admin.id]);
+    await audit(admin.id, 'branch_created', 'branch', created[0].id, { branch: fields.name, monthly_target: fields.target });
+    res.status(201).json({ ok: true, id: created[0].id });
+  } catch {
+    res.status(409).json({ error: 'A branch with that name already exists' });
+  }
+}
+
+async function updateBranch(req, res, id) {
+  if (req.method !== 'POST') return methodNotAllowed(res);
+  const admin = await requireAdmin(req, res);
+  if (!admin) return;
+  if (!validCsrf(req, admin)) return res.status(403).json({ error: 'Invalid request token' });
+  const { error, fields } = validBranchFields(req.body);
+  if (error) return res.status(400).json({ error });
+  const existing = await query('SELECT name FROM branches WHERE id = $1', [id]);
+  if (!existing.length) return res.status(404).json({ error: 'Branch not found' });
+  try {
+    // One statement so a rename and the staff re-pointing succeed or fail together.
+    await query(`WITH renamed AS (
+        UPDATE branches SET name = $2, monthly_target = $3, updated_at = NOW() WHERE id = $1 RETURNING id
+      )
+      UPDATE staff SET branch = $2, updated_at = NOW() WHERE branch = $4 AND $4 <> $2 AND EXISTS (SELECT 1 FROM renamed)`,
+      [id, fields.name, fields.target, existing[0].name]);
+  } catch {
+    return res.status(409).json({ error: 'A branch with that name already exists' });
+  }
+  await audit(admin.id, 'branch_updated', 'branch', id, { branch: fields.name, previous_name: existing[0].name, monthly_target: fields.target });
   res.status(200).json({ ok: true });
 }
 
@@ -238,6 +287,9 @@ module.exports = async (req, res) => {
     if (path === 'users') return users(req, res);
     const match = path.match(/^users\/([^/]+)\/(disable|reset-password)$/);
     if (match) return manageUser(req, res, match[2], match[1]);
+    if (path === 'branches') return branches(req, res);
+    const branchMatch = path.match(/^branches\/(\d+)\/update$/);
+    if (branchMatch) return updateBranch(req, res, branchMatch[1]);
     if (path === 'staff') return req.method === 'GET' ? staffList(req, res) : createStaff(req, res);
     const staffMatch = path.match(/^staff\/([^/]+)\/(update|deactivate|reactivate)$/);
     if (staffMatch) {
