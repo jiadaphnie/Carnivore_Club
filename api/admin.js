@@ -263,6 +263,12 @@ async function manageUser(req, res, action, targetId) {
     await audit(admin.id, 'admin_disabled', 'admin', targetId, { username: target[0].username });
     return res.status(200).json({ ok: true });
   }
+  if (action === 'enable') {
+    const target = await query('UPDATE admins SET active = TRUE, updated_at = NOW() WHERE id = $1 RETURNING username', [targetId]);
+    if (!target.length) return res.status(404).json({ error: 'Admin not found' });
+    await audit(admin.id, 'admin_enabled', 'admin', targetId, { username: target[0].username });
+    return res.status(200).json({ ok: true });
+  }
   const password = String(req.body && req.body.password || '');
   if (password.length < 12) return res.status(400).json({ error: 'Temporary password must have at least 12 characters' });
   const target = await query('UPDATE admins SET password_hash = $2, must_change_password = TRUE, updated_at = NOW() WHERE id = $1 RETURNING username', [targetId, await hashPassword(password)]);
@@ -285,7 +291,7 @@ module.exports = async (req, res) => {
     if (path === 'manual-referrals') return manualReferral(req, res);
     if (path === 'audit-log') return auditLog(req, res);
     if (path === 'users') return users(req, res);
-    const match = path.match(/^users\/([^/]+)\/(disable|reset-password)$/);
+    const match = path.match(/^users\/([^/]+)\/(disable|enable|reset-password)$/);
     if (match) return manageUser(req, res, match[2], match[1]);
     if (path === 'branches') return branches(req, res);
     const branchMatch = path.match(/^branches\/(\d+)\/update$/);
