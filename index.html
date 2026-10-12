@@ -435,6 +435,180 @@
     table.roster-table td { padding: 6px 8px; }
     .trend-row { overflow-x: auto; padding-bottom: 4px; }
   }
+
+  /* ---- Carnivy FAQ helper ---- */
+  .carnivy { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 1000; font-size: 14px; }
+  .carnivy-launcher {
+    display: block;
+    width: 68px;
+    height: 68px;
+    padding: 0;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    background: var(--surface-2);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .carnivy-launcher:hover { transform: scale(1.06) rotate(-3deg); }
+  .carnivy-launcher:focus-visible,
+  .carnivy-close:focus-visible,
+  .carnivy-reset:focus-visible,
+  .carnivy-chip:focus-visible,
+  .carnivy-nudge-close:focus-visible { outline: 3px solid var(--series-1); outline-offset: 2px; }
+  .carnivy-launcher svg { width: 100%; height: 100%; display: block; }
+  .carnivy:not(.is-open) .carnivy-launcher svg { animation: carnivy-bob 3.2s ease-in-out infinite; }
+  @keyframes carnivy-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+  .carnivy-nudge {
+    position: absolute;
+    right: 4px;
+    bottom: 82px;
+    width: 230px;
+    padding: 12px 30px 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 14px 14px 4px 14px;
+    background: var(--surface-2);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.16);
+    color: var(--text-primary);
+    line-height: 1.4;
+    animation: carnivy-pop 0.25s ease-out;
+  }
+  .carnivy-nudge[hidden] { display: none; }
+  .carnivy-nudge-close {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    width: 24px;
+    height: 24px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .carnivy-panel {
+    position: absolute;
+    right: 0;
+    bottom: 82px;
+    width: min(380px, calc(100vw - 32px));
+    max-height: min(580px, calc(100vh - 120px));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface-1);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.28);
+    color: var(--text-primary);
+    transform-origin: bottom right;
+    animation: carnivy-pop 0.2s ease-out;
+  }
+  .carnivy-panel[hidden] { display: none; }
+  @keyframes carnivy-pop { from { opacity: 0; transform: translateY(8px) scale(0.96); } to { opacity: 1; transform: none; } }
+
+  .carnivy-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 12px 12px 14px;
+    border-bottom: 1px solid var(--gridline);
+    background: var(--surface-2);
+  }
+  .carnivy-head .carnivy-avatar { width: 40px; height: 40px; flex: none; }
+  .carnivy-title { flex: 1; min-width: 0; }
+  .carnivy-title strong { display: block; font-size: 15px; letter-spacing: -0.01em; }
+  .carnivy-title span { color: var(--muted); font-size: 12px; }
+  .carnivy-reset,
+  .carnivy-close {
+    width: 32px;
+    height: 32px;
+    flex: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-1);
+    color: var(--text-secondary);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .carnivy-reset[hidden] { display: none; }
+
+  .carnivy-log {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overscroll-behavior: contain;
+  }
+  .carnivy-row { display: flex; gap: 8px; align-items: flex-end; animation: carnivy-pop 0.2s ease-out; }
+  .carnivy-row.me { justify-content: flex-end; }
+  .carnivy-row .carnivy-avatar { width: 28px; height: 28px; flex: none; }
+  .carnivy-bubble {
+    max-width: 85%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 14px 14px 14px 4px;
+    background: var(--surface-2);
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+  .carnivy-row.me .carnivy-bubble {
+    border-color: transparent;
+    border-radius: 14px 14px 4px 14px;
+    background: var(--series-1);
+    color: #fff;
+  }
+  .carnivy-bubble p { margin: 0; }
+  .carnivy-bubble p + p,
+  .carnivy-bubble p + ol,
+  .carnivy-bubble ol + p { margin-top: 8px; }
+  .carnivy-bubble ol { margin: 0; padding-left: 20px; }
+  .carnivy-bubble li + li { margin-top: 4px; }
+  .carnivy-bubble .carnivy-label { font-weight: 700; }
+  .carnivy-bubble a { color: var(--series-1); font-weight: 600; }
+  .carnivy-typing { display: inline-flex; gap: 4px; padding: 4px 2px; }
+  .carnivy-typing i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: carnivy-dot 1s ease-in-out infinite;
+  }
+  .carnivy-typing i:nth-child(2) { animation-delay: 0.15s; }
+  .carnivy-typing i:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes carnivy-dot { 0%, 100% { opacity: 0.3; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-3px); } }
+
+  .carnivy-chips { display: flex; flex-direction: column; gap: 6px; padding-left: 36px; animation: carnivy-pop 0.2s ease-out; }
+  .carnivy-chip {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--series-1);
+    border-radius: 12px;
+    background: var(--series-1-soft);
+    color: var(--text-primary);
+    font: inherit;
+    text-align: left;
+    line-height: 1.35;
+    cursor: pointer;
+  }
+  .carnivy-chip:hover { background: var(--series-1); color: #fff; }
+
+  @media (max-width: 640px) {
+    .carnivy { right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+    .carnivy-launcher { width: 60px; height: 60px; }
+    .carnivy-panel { width: calc(100vw - 24px); max-height: calc(100vh - 100px); bottom: 74px; }
+    .carnivy-nudge { bottom: 74px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .carnivy *, .carnivy-panel, .carnivy-nudge { animation: none !important; transition: none !important; }
+  }
+  @media print { .carnivy { display: none; } }
 </style>
 </head>
 <body class="dashboard-loading">
@@ -1402,6 +1576,261 @@ loadDashboard().catch(error => {
 setInterval(() => {
   if (!new URLSearchParams(window.location.search).has('month')) loadDashboard().catch(() => {});
 }, 60000);
+</script>
+
+<!-- Carnivy FAQ helper: character art is defined once below and reused via <use> -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="carnivy-art" viewBox="0 0 128 128">
+    <!-- chef hat -->
+    <g stroke="#3b1a16" stroke-width="3" stroke-linejoin="round">
+      <circle cx="49" cy="17" r="10" fill="#fff"/>
+      <circle cx="64" cy="12" r="11" fill="#fff"/>
+      <circle cx="79" cy="17" r="10" fill="#fff"/>
+      <rect x="46" y="20" width="36" height="14" rx="3" fill="#fff"/>
+    </g>
+    <!-- waving arm -->
+    <path d="M104 78 Q118 74 118 58" fill="none" stroke="#3b1a16" stroke-width="9" stroke-linecap="round"/>
+    <path d="M104 78 Q118 74 118 58" fill="none" stroke="#d9473a" stroke-width="4.5" stroke-linecap="round"/>
+    <!-- steak body: dark outline, fat rim, meat -->
+    <path d="M22 78 C14 52 36 32 64 33 C94 33 112 52 106 80 C102 106 80 120 58 116 C36 114 25 98 22 78 Z"
+          fill="#d9473a" stroke="#3b1a16" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M22 78 C14 52 36 32 64 33 C94 33 112 52 106 80 C102 106 80 120 58 116 C36 114 25 98 22 78 Z"
+          fill="#d9473a" stroke="#f8dfcc" stroke-width="7" stroke-linejoin="round"/>
+    <!-- marbling -->
+    <path d="M36 54 q10 -8 20 -1" fill="none" stroke="#f3a89b" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M78 104 q10 -6 18 -16" fill="none" stroke="#f3a89b" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M92 50 q6 4 8 12" fill="none" stroke="#f3a89b" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- eyes -->
+    <ellipse cx="50" cy="76" rx="6" ry="8" fill="#2b1210"/>
+    <ellipse cx="78" cy="76" rx="6" ry="8" fill="#2b1210"/>
+    <circle cx="48.2" cy="72.8" r="2.2" fill="#fff"/>
+    <circle cx="76.2" cy="72.8" r="2.2" fill="#fff"/>
+    <!-- cheeks + smile -->
+    <circle cx="38" cy="90" r="6" fill="#ff9f8f" opacity="0.85"/>
+    <circle cx="90" cy="90" r="6" fill="#ff9f8f" opacity="0.85"/>
+    <path d="M55 90 Q64 101 73 90" fill="#7a1f19" stroke="#2b1210" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- waving hand -->
+    <circle cx="118" cy="55" r="6.5" fill="#d9473a" stroke="#3b1a16" stroke-width="3"/>
+  </symbol>
+</svg>
+
+<div class="carnivy" id="carnivy">
+  <div class="carnivy-nudge" id="carnivy-nudge" hidden>
+    <button class="carnivy-nudge-close" id="carnivy-nudge-close" type="button" aria-label="Dismiss">&times;</button>
+    Hi, I'm <strong>Carnivy</strong>! Questions about vouchers, rewards or referral bonuses? Tap me.
+  </div>
+
+  <div class="carnivy-panel" id="carnivy-panel" role="dialog" aria-label="Carnivy FAQ helper" hidden>
+    <div class="carnivy-head">
+      <svg class="carnivy-avatar" aria-hidden="true"><use href="#carnivy-art"/></svg>
+      <div class="carnivy-title"><strong>Carnivy</strong><span>Your Carnivore Club FAQ buddy</span></div>
+      <button class="carnivy-reset" id="carnivy-reset" type="button" aria-label="Start over" title="Start over" hidden>&#8634;</button>
+      <button class="carnivy-close" id="carnivy-close" type="button" aria-label="Close FAQ helper">&times;</button>
+    </div>
+    <div class="carnivy-log" id="carnivy-log" aria-live="polite"></div>
+  </div>
+
+  <button class="carnivy-launcher" id="carnivy-launcher" type="button" aria-label="Open Carnivy, the FAQ helper" aria-expanded="false" aria-controls="carnivy-panel">
+    <svg aria-hidden="true"><use href="#carnivy-art"/></svg>
+  </button>
+</div>
+
+<script>
+/* Carnivy FAQ helper. To add or edit an FAQ, change the CARNIVY_FAQS list below.
+   Each entry: q (question), intro (text before the steps), stepsLabel + steps (numbered list), outro (text after). */
+(function () {
+  const CARNIVY_FAQS = [
+    {
+      q: "A new member signed up but didn't receive the HK$50 welcome voucher. Why?",
+      intro: ["This happens when the guest has purchased from Steak King before — our loyalty platform already stored their details, so the system treats them as an existing member and their welcome voucher has expired."],
+      stepsLabel: "What to do:",
+      outro: ["You don't need to explain this to the guest. Simply issue the voucher to them manually."]
+    },
+    {
+      q: "The reward barcode isn't working. What should I do?",
+      intro: ["This usually happens when a guest has already claimed the voucher themselves on the app."],
+      stepsLabel: "What to do:",
+      steps: [
+        "Redeem the reward directly through the POS — no need to scan a barcode.",
+        "The reward will appear in the list as usual.",
+        "Select the voucher that shows no points, since the points were already deducted when the guest claimed it."
+      ]
+    },
+    {
+      q: "How do I redeem a guest's birthday reward?",
+      steps: [
+        "Ring up the birthday items on a separate bill.",
+        "Apply the birthday coupon to that bill.",
+        "The coupon will automatically make the items free."
+      ]
+    },
+    {
+      q: "When do staff referral bonuses get paid?",
+      intro: ["According to the Finance team, bonuses are paid two months after they are earned. For example, referrals earned in August will appear in the October payroll."]
+    },
+    {
+      q: "Are part-time staff eligible for referral incentives?",
+      intro: ["Yes! Each branch has extra QR codes labelled with the branch name plus a number (e.g., \"FIS CWB1\")."],
+      stepsLabel: "To enrol a part-time staff member:",
+      steps: [
+        "Register them as a Carnivore Club member.",
+        "Go to Refer a Friend and edit their referral code to match the QR code (e.g., \"FISCWB1\").",
+        "Send Jia (95578137) a screenshot of their account details — name, email, and phone number — so we can track their referrals and include them in the incentives payroll."
+      ]
+    }
+  ];
+  const GREETING = "Hi! I'm Carnivy 🥩 Tap a question below and I'll walk you through it.";
+  const MORE = "Anything else I can help with?";
+
+  const root = document.getElementById('carnivy');
+  if (!root) return;
+  const launcher = document.getElementById('carnivy-launcher');
+  const panel = document.getElementById('carnivy-panel');
+  const log = document.getElementById('carnivy-log');
+  const closeBtn = document.getElementById('carnivy-close');
+  const resetBtn = document.getElementById('carnivy-reset');
+  const nudge = document.getElementById('carnivy-nudge');
+  const nudgeClose = document.getElementById('carnivy-nudge-close');
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let started = false;
+  let busy = false;
+
+  function store(get, key, value) {
+    try { return get ? window.sessionStorage.getItem(key) : window.sessionStorage.setItem(key, value); } catch (e) { return null; }
+  }
+
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function avatar() {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'carnivy-avatar');
+    svg.setAttribute('aria-hidden', 'true');
+    const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    use.setAttribute('href', '#carnivy-art');
+    svg.appendChild(use);
+    return svg;
+  }
+
+  function scrollDown() { log.scrollTop = log.scrollHeight; }
+
+  function carnivyRow(content) {
+    const row = el('div', 'carnivy-row');
+    row.appendChild(avatar());
+    const bubble = el('div', 'carnivy-bubble');
+    if (typeof content === 'string') bubble.appendChild(el('p', '', content));
+    else if (content) bubble.appendChild(content);
+    row.appendChild(bubble);
+    log.appendChild(row);
+    scrollDown();
+    return { row: row, bubble: bubble };
+  }
+
+  function userRow(text) {
+    const row = el('div', 'carnivy-row me');
+    row.appendChild(el('div', 'carnivy-bubble', text));
+    log.appendChild(row);
+    scrollDown();
+  }
+
+  function answerNode(faq) {
+    const frag = document.createDocumentFragment();
+    (faq.intro || []).forEach(function (text) { frag.appendChild(el('p', '', text)); });
+    if (faq.steps && faq.steps.length) {
+      if (faq.stepsLabel) frag.appendChild(el('p', 'carnivy-label', faq.stepsLabel));
+      const list = el('ol');
+      faq.steps.forEach(function (step) { list.appendChild(el('li', '', step)); });
+      frag.appendChild(list);
+    } else if (faq.stepsLabel) {
+      frag.appendChild(el('p', 'carnivy-label', faq.stepsLabel));
+    }
+    (faq.outro || []).forEach(function (text) { frag.appendChild(el('p', '', text)); });
+    return frag;
+  }
+
+  function showChips(exceptIndex) {
+    const old = log.querySelector('.carnivy-chips');
+    if (old) old.remove();
+    const wrap = el('div', 'carnivy-chips');
+    CARNIVY_FAQS.forEach(function (faq, index) {
+      if (index === exceptIndex) return;
+      const chip = el('button', 'carnivy-chip', faq.q);
+      chip.type = 'button';
+      chip.addEventListener('click', function () { ask(index); });
+      wrap.appendChild(chip);
+    });
+    log.appendChild(wrap);
+    scrollDown();
+  }
+
+  function ask(index) {
+    if (busy) return;
+    busy = true;
+    const faq = CARNIVY_FAQS[index];
+    const old = log.querySelector('.carnivy-chips');
+    if (old) old.remove();
+    userRow(faq.q);
+    resetBtn.hidden = false;
+    const typing = el('span', 'carnivy-typing');
+    typing.append(el('i'), el('i'), el('i'));
+    const pending = carnivyRow(typing);
+    window.setTimeout(function () {
+      pending.bubble.textContent = '';
+      pending.bubble.appendChild(answerNode(faq));
+      scrollDown();
+      window.setTimeout(function () {
+        carnivyRow(MORE);
+        showChips(index);
+        busy = false;
+      }, reduceMotion ? 0 : 350);
+    }, reduceMotion ? 0 : 650);
+  }
+
+  function start() {
+    log.textContent = '';
+    busy = false;
+    resetBtn.hidden = true;
+    carnivyRow(GREETING);
+    showChips(-1);
+    started = true;
+  }
+
+  function hideNudge() { nudge.hidden = true; }
+
+  function open() {
+    hideNudge();
+    store(false, 'carnivyNudge', '1');
+    panel.hidden = false;
+    root.classList.add('is-open');
+    launcher.setAttribute('aria-expanded', 'true');
+    if (!started) start();
+    closeBtn.focus();
+  }
+
+  function close() {
+    panel.hidden = true;
+    root.classList.remove('is-open');
+    launcher.setAttribute('aria-expanded', 'false');
+    launcher.focus();
+  }
+
+  launcher.addEventListener('click', function () { if (panel.hidden) open(); else close(); });
+  closeBtn.addEventListener('click', close);
+  resetBtn.addEventListener('click', start);
+  nudgeClose.addEventListener('click', function () { hideNudge(); store(false, 'carnivyNudge', '1'); });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && !panel.hidden) close();
+  });
+
+  if (!store(true, 'carnivyNudge')) {
+    window.setTimeout(function () { if (panel.hidden) nudge.hidden = false; }, 2500);
+    window.setTimeout(hideNudge, 15000);
+  }
+})();
 </script>
 </body>
 </html>
