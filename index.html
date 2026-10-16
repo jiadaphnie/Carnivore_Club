@@ -609,6 +609,15 @@
     .carnivy *, .carnivy-panel, .carnivy-nudge { animation: none !important; transition: none !important; }
   }
   @media print { .carnivy { display: none; } }
+  .wk-card.wk-hit { border-color: var(--good-text); background: linear-gradient(90deg, var(--good-soft), var(--surface-1) 60%); }
+  .fill-good { background: var(--good-text); }
+  .wk-of { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
+  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; padding: 3px; background: var(--surface-1); margin: 4px 0 10px; }
+  .seg button { border: 0; background: transparent; color: var(--text-secondary); font: 600 13px system-ui, sans-serif; padding: 6px 16px; border-radius: 999px; cursor: pointer; }
+  .seg button.on { background: var(--series-1); color: #fff; }
+  .wk-note { font-size: 12.5px; color: var(--text-secondary); margin: 0 0 10px; }
+  .wk-note b { color: var(--good-text); }
+  [hidden] { display: none !important; }
 </style>
 </head>
 <body class="dashboard-loading">
@@ -694,6 +703,12 @@
   <section>
     <h2>Branch leaderboard · August 2026</h2>
     <div class="section-hint">Ranked by referrals this month, with each branch's share of its monthly sign-up target. Every branch starts back at zero next month.</div>
+    <div class="seg" id="view-toggle" role="group" aria-label="Leaderboard period" hidden>
+      <button type="button" id="view-week">This week</button>
+      <button type="button" id="view-month" class="on">This month</button>
+    </div>
+    <div id="week-view" hidden></div>
+    <div id="month-view">
     <ul class="branch-list">
       <li class="branch-card">
         <div class="rank-badge gold">🥇</div>
@@ -905,6 +920,7 @@
       </li>
     
     </ul>
+    </div>
   </section>
 
   <section>
@@ -1486,6 +1502,38 @@ function replaceMarkedContent(startText, endText, content) {
   end.parentNode.insertBefore(range.createContextualFragment(content), end);
 }
 
+let weekChoice = null; // 'week' | 'month' once the viewer picks one
+
+function setView(view) {
+  const week = view === 'week';
+  document.querySelector('#view-week').classList.toggle('on', week);
+  document.querySelector('#view-month').classList.toggle('on', !week);
+  document.querySelector('#week-view').hidden = !week;
+  document.querySelector('#month-view').hidden = week;
+}
+
+function renderWeek(data) {
+  const week = data.week;
+  const toggle = document.querySelector('#view-toggle');
+  const container = document.querySelector('#week-view');
+  if (!week || !week.is_current) {
+    // Weekly competition only runs for the live month; past months stay on the monthly view.
+    toggle.hidden = true;
+    setView('month');
+    return;
+  }
+  const rows = Object.entries(week.branches).map(([name, values]) => ({ name, ...values, pct: values.target ? values.referrals / values.target : 0 }))
+    .sort((left, right) => right.pct - left.pct || right.referrals - left.referrals);
+  const hit = rows.filter(row => row.target > 0 && row.referrals >= row.target).length;
+  const left = week.days_left;
+  container.innerHTML = `<div class="wk-note"><b>${hit} of ${rows.length} branches</b> hit their weekly target · ${escapeHtml(week.label)} · ${left === 0 ? 'last day' : left + (left === 1 ? ' day left' : ' days left')} · weekly target = monthly target ÷ days in month × days in week</div><ul class="branch-list">` + rows.map((row, index) => {
+    const met = row.target > 0 && row.referrals >= row.target;
+    return `<li class="branch-card wk-card${met ? ' wk-hit' : ''}"><div class="rank-badge${met ? ' gold' : ''}">${met ? '🏆' : index + 1}</div><div class="branch-main"><div class="branch-name-line"><span class="branch-name">${escapeHtml(row.name)}</span></div><div class="track"><div class="fill${met ? ' fill-good' : ''}" style="width:${Math.min(row.pct * 100, 100)}%"></div></div></div><div class="branch-stats"><div class="lb-count">${row.referrals}<span class="wk-of"> / ${row.target}</span></div><div class="target-badge${met ? ' met' : ''}">${met ? '✓ Target hit' : (row.target - row.referrals) + ' to go'}</div></div></li>`;
+  }).join('') + '</ul>';
+  toggle.hidden = false;
+  setView(weekChoice || 'week');
+}
+
 function renderDashboard(data) {
   const month = data.selected_month;
   const monthName = data.month_names[month];
@@ -1517,7 +1565,7 @@ function renderDashboard(data) {
       <div class="mvp-info"><div class="mvp-label">#${index + 1} · ${escapeHtml(monthName)}</div><div class="mvp-name">${escapeHtml(staff.display_name)}</div><div class="mvp-meta">${escapeHtml(staff.branch)} · ${escapeHtml(staff.role)}</div></div>
       <div class="mvp-stats"><div class="mvp-stat"><div class="mvp-stat-value">${staff.referrals_this_month}</div><div class="mvp-stat-label">referrals</div></div><div class="mvp-stat"><div class="mvp-stat-value">HKD ${staff.bonus_this_month}</div><div class="mvp-stat-label">referral bonus</div></div></div></div>`).join('') : '<div class="empty-state">No staff referrals have been recorded for this month yet.</div>';
 
-  document.querySelector('.branch-list').innerHTML = rankedBranches.map((branch, index) => {
+  document.querySelector('#month-view .branch-list').innerHTML = rankedBranches.map((branch, index) => {
     const target = data.store_targets[branch.name];
     const share = target ? (branch.referrals / target * 100).toFixed(1) : '0.0';
     return `<li class="branch-card"><div class="rank-badge${branch.referrals === 0 ? ' muted-badge' : ''}">${index + 1}</div><div class="branch-main"><div class="branch-name-line"><span class="branch-name">${escapeHtml(branch.name)}</span><span class="branch-sub">${branch.active_referrers} of ${branch.total_staff} staff on the board · target ${target.toLocaleString()}/mo</span></div><div class="track"><div class="fill" style="width:${Math.min(Number(share), 100)}%"></div></div></div><div class="branch-stats"><div class="lb-count">${branch.referrals}</div><div class="lb-count-label">${branch.referrals === 1 ? 'referral' : 'referrals'}</div><div class="lb-value">${branch.referrals ? `HKD ${branch.bonus} bonus` : 'n/a'}</div><div class="target-badge${branch.referrals >= target ? ' met' : ''}">${share}% of target</div></div></li>`;
@@ -1526,6 +1574,8 @@ function renderDashboard(data) {
   const monthly = Object.entries(data.monthly).sort(([left], [right]) => left.localeCompare(right));
   const maximum = Math.max(...monthly.map(([, values]) => values.referrals), 1);
   document.querySelector('.trend-row').innerHTML = monthly.map(([key, values]) => `<div class="trend-col${key === month ? ' current' : ''}"><div class="trend-bar-track"><div class="trend-bar" style="height:${Math.round(values.referrals / maximum * 100)}%"></div></div><div class="trend-value">${values.referrals}</div><div class="trend-label">${escapeHtml(data.month_names[key])}</div></div>`).join('');
+
+  renderWeek(data);
 
   const roster = rankedBranches.map((branch, index) => {
     const rows = data.staff.filter(staff => staff.branch === branch.name)
@@ -1557,6 +1607,9 @@ async function loadDashboard() {
   else url.searchParams.set('month', data.selected_month);
   window.history.replaceState({}, '', url);
 }
+
+document.querySelector('#view-week').addEventListener('click', () => { weekChoice = 'week'; setView('week'); });
+document.querySelector('#view-month').addEventListener('click', () => { weekChoice = 'month'; setView('month'); });
 
 document.querySelector('#month-select').addEventListener('change', event => {
   const url = new URL(window.location);
