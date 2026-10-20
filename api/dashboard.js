@@ -11,8 +11,8 @@ module.exports = async (req, res) => {
 
   try {
     await ensureSchema();
-    const sync = req.query.month ? { state: await getSyncState(), sync_in_progress: false } : await ensureFreshReferrals();
-    const dashboard = await getDashboard(req.query.month);
+    const sync = req.query.month || req.query.week ? { state: await getSyncState(), sync_in_progress: false } : await ensureFreshReferrals();
+    const dashboard = await getDashboard(req.query.month, req.query.week);
     res.setHeader('Cache-Control', 'no-store');
     res.status(200).json({
       ...dashboard,
